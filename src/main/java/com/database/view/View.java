@@ -13,7 +13,7 @@ public class View {
         System.out.println("************************************************************************");
         System.out.println("***********************\t\tA大学进出校管理系统\t\t************************");
         System.out.println("***********************\t\t用户登录\t\t\t\t************************");
-        System.out.println("***********************\t\t请输入账号：\t\t\t************************");
+        System.out.println("***********************\t\t请输入用户名：\t\t\t************************");
         String user_name = input.nextLine();
         System.out.println("***********************\t\t请输入密码：\t\t\t************************");
         String password = input.nextLine();
