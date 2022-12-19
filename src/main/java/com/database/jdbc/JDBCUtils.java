@@ -12,8 +12,7 @@ public class JDBCUtils {
     private static String password;
 
     static {
-        //这行有问题，无法读取文件，暂时只能通过JDBC连接数据库
-        InputStream is = JDBCUtils.class.getResourceAsStream("../../db.properties");
+        InputStream is = JDBCUtils.class.getClassLoader().getResourceAsStream("db.properties");
         Properties p = new Properties();
         try {
             p.load(is);
