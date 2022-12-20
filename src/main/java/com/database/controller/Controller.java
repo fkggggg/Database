@@ -1,6 +1,8 @@
 package com.database.controller;
 
+import com.database.bean.Student;
 import com.database.bean.User;
+import com.database.dao.StudentDao_Imp;
 import com.database.dao.UserDao_Imp;
 import com.database.view.StudentView;
 import com.database.view.View;
@@ -11,10 +13,10 @@ public class Controller {
     public static void main(String arg[]) throws SQLException {
         while(true)
         {
-            User user = View.LoginView();
+            User loginuser = View.LoginView();
             UserDao_Imp userDao_imp= new UserDao_Imp();
-            int permission = userDao_imp.login(user);
-            switch (permission) {
+            User user = userDao_imp.login(loginuser);
+            switch (user.getPermission()) {
                 case -2 -> System.out.println("该用户名不存在，请重新输入！");
                 case -1 -> System.out.println("用户名与密码不匹配，请重新输入！");
                 case 0 -> {
@@ -31,7 +33,7 @@ public class Controller {
                 }
                 case 3 -> {
                     System.out.println("学生登录！");
-                    StudentServer();
+                    StudentServer(user);
                 }
                 default -> {
                 }
@@ -45,8 +47,10 @@ public class Controller {
     }
     private static void ClassServer() {
     }
-    private static void StudentServer() {
+    private static void StudentServer(User user) throws SQLException {
         UserDao_Imp userDao_imp = new UserDao_Imp();
+        StudentDao_Imp studentDao_imp = new StudentDao_Imp();
+        Student student = studentDao_imp.getStudent(user.getUser_id());
         while(true)
         {
             int choose = View.StudentView();
@@ -54,7 +58,7 @@ public class Controller {
                 case 0:
                     System.exit(-1);
                 case 1:
-                    int choose1 = StudentView.PersonalInformationView();
+                    int choose1 = StudentView.PersonalInformationView(student);
                     switch (choose1){
                         case 0:
                             break;

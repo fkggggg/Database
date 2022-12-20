@@ -1,27 +1,29 @@
 package com.database.view;
 
+import com.database.bean.Student;
+
 import java.util.Scanner;
 
 public class StudentView {
     private static Scanner input = new Scanner(System.in);
     //个人信息
-    public static int PersonalInformationView(){
+    public static int PersonalInformationView(Student student){
         System.out.println("***********************\t\t个人信息页面\t\t************************");
         System.out.println("***********************\t\t基本信息\t\t************************");
-        System.out.println("\t\t学号：");
-        System.out.println("\t\t姓名：");
-        System.out.println("\t\t院系：");
-        System.out.println("\t\t班级：");
-        System.out.println("\t\t联系电话：");
-        System.out.println("\t\t电子邮箱：");
-        System.out.println("\t\t宿舍：");
-        System.out.println("\t\t住址：");
-        System.out.println("\t\t证件类型：");
-        System.out.println("\t\t证件号：");
+        System.out.println("\t\t学号："+student.getStudent_id());
+        System.out.println("\t\t姓名："+student.getName());
+        System.out.println("\t\t院系："+student.getCollege_name());
+        System.out.println("\t\t班级："+student.getClass_name());
+        System.out.println("\t\t联系电话："+student.getPhone());
+        System.out.println("\t\t电子邮箱："+student.getEmail());
+        System.out.println("\t\t宿舍："+student.getDormitory());
+        System.out.println("\t\t住址："+student.getAddress());
+        System.out.println("\t\t证件类型："+student.getId_type());
+        System.out.println("\t\t证件号："+student.getId_number());
         System.out.println("***********************\t\t权限信息\t\t************************");
         System.out.println("\t\t今日是否健康打卡：");
         System.out.println("\t\t是否在校：");
-        System.out.println("\t\t进校权限：");
+        System.out.println("\t\t进校权限："+student.getLimits());
         System.out.println("***********************\t\t操作\t\t************************");
         System.out.println("***********************\t\t0：返回上一页面\t\t************************");
         System.out.println("***********************\t\t1：修改基本信息\t\t************************");
@@ -32,7 +34,7 @@ public class StudentView {
         else
         {
             System.out.println("请按提示输入指令！");
-            return PersonalInformationView();
+            return PersonalInformationView(student);
         }
     }
 

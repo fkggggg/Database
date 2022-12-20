@@ -9,15 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao_Imp implements UserDao{
-    private static final String CHECK_USERNAME = "SELECT permission from user WHERE user_name=?";
-    private static final String CHECK_PASSWORD = "SELECT permission from user WHERE user_name=? AND password=?";
+    private static final String CHECK_USERNAME = "SELECT * from user WHERE user_name=?";
+    private static final String CHECK_PASSWORD = "SELECT * from user WHERE user_name=? AND password=?";
+
 
     @Override
-    public int login(User user) throws SQLException {
+    public User login(User user) throws SQLException {
         Connection connection = JDBCUtils.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(CHECK_USERNAME);
         preparedStatement.setString(1,user.getUser_name());
         ResultSet result = preparedStatement.executeQuery();
+        User return_user = new User();
         //ResultSet没有size参数，通过next()方法判断是否为空
         if (result.next())
         {
@@ -27,10 +29,16 @@ public class UserDao_Imp implements UserDao{
             ResultSet result2 = preparedStatement2.executeQuery();
             if(result2.next())
             {
-                return result2.getInt("permission");
+                return_user.setUser_id(result2.getInt("user_id"));
+                return_user.setUser_name(user.getUser_name());
+                return_user.setPassword(user.getPassword());
+                return_user.setPermission(result2.getInt("permission"));
+                return return_user;
             }
-            return -1;
+            return_user.setPermission(-1);
+            return return_user;
         }
-        return -2;
+        return_user.setPermission(-2);
+        return return_user;
     }
 }
