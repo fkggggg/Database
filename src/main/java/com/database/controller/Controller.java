@@ -8,7 +8,7 @@ import com.database.view.View;
 import java.sql.SQLException;
 
 public class Controller {
-    public static void main() throws SQLException {
+    public static void main(String arg[]) throws SQLException {
         while(true)
         {
             User user = View.LoginView();
