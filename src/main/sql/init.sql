@@ -72,25 +72,40 @@ INSERT INTO `student` VALUES ('5', '20301234568', '李四', '计算机科学技�
 DROP TABLE IF EXISTS `daily_health_report`;
 CREATE TABLE `daily_health_report` (
                             `daily_report_id` int(20) NOT NULL AUTO_INCREMENT,
-                           `student_id` int(20) NOT NULL,
+                           `student_id` char(11) NOT NULL,
                            `date` date NOT NULL,
                            `time` time NOT NULL,
-                           `health_condition` varchar (20) NOT NULL,
+                           `health_condition` int(1) NOT NULL,
+                           `abnormal_description` varchar(200),
                            `temperature` char (10) NOT NULL,
-                           `location` varchar (20) DEFAULT NULL,
+                           `location` varchar (50) NOT NULL,
                             PRIMARY KEY (`daily_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='健康日报';
+/* health_condition:健康状况，0表示健康，1表示存在异常，具体异常可填写abnormal_condition进行描述*/
+INSERT INTO `daily_health_report` VALUES ('1', '20301234567', '2022-12-19', '15:30:00', '0', null, '36.2','上海市杨浦区松花江路2500号');
+INSERT INTO `daily_health_report` VALUES ('2', '20301234568', '2022-12-19', '15:30:00', '0', null, '36.2','上海市杨浦区松花江路2500号');
+INSERT INTO `daily_health_report` VALUES ('3', '20301234567', '2022-12-20', '15:30:00', '0', null, '36.2','上海市杨浦区松花江路2500号');
+
 
 DROP TABLE IF EXISTS `check_report`;
 CREATE TABLE `check_report` (
                                        `check_report_id` int(20) NOT NULL AUTO_INCREMENT,
-                                       `student_id` int(20) NOT NULL,
+                                       `student_id` char(11) NOT NULL,
                                        `date` date NOT NULL,
                                        `time` time NOT NULL,
                                        `state` int (1) NOT NULL,
-                                       `campus` char (5) NOT NULL,
+                                       `campus` char (1) NOT NULL,
                                        PRIMARY KEY (`check_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='打卡记录';
+/* state:状态，0表示出校，1表示入校*/
+/* campus:校区，输入值为H/J/F/Z */
+INSERT INTO `check_report` VALUES ('1', '20301234567', '2022-12-19', '15:30:00', '0','H');
+INSERT INTO `check_report` VALUES ('2', '20301234567', '2022-12-19', '15:31:00', '1','H');
+INSERT INTO `check_report` VALUES ('3', '20301234567', '2022-12-19', '15:32:00', '0','H');
+INSERT INTO `check_report` VALUES ('4', '20301234567', '2022-12-20', '15:30:00', '0','H');
+INSERT INTO `check_report` VALUES ('5', '20301234567', '2022-12-20', '15:31:00', '1','H');
+INSERT INTO `check_report` VALUES ('6', '20301234567', '2022-12-20', '15:32:00', '0','H');
+INSERT INTO `check_report` VALUES ('7', '20301234567', '2022-12-20', '15:34:00', '1','H');
 
 DROP TABLE IF EXISTS `departure_report_form`;
 CREATE TABLE `departure_report_form` (

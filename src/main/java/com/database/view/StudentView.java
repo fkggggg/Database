@@ -21,8 +21,8 @@ public class StudentView {
         System.out.println("\t\t证件类型："+student.getId_type());
         System.out.println("\t\t证件号："+student.getId_number());
         System.out.println("***********************\t\t权限信息\t\t************************");
-        System.out.println("\t\t今日是否健康打卡：");
-        System.out.println("\t\t是否在校：");
+        System.out.println("\t\t今日是否健康打卡："+(student.getReport()==1?"是":"否"));
+        System.out.println("\t\t是否在校："+(student.getCheck()==1?"是":"否"));
         System.out.println("\t\t进校权限："+student.getLimits());
         System.out.println("***********************\t\t操作\t\t************************");
         System.out.println("***********************\t\t0：返回上一页面\t\t************************");

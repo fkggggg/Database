@@ -13,9 +13,12 @@ public class Student extends User implements Cloneable{
     private String id_number;
     private String limits;
 
-    public Student(User user,String student_id,String name,String college_name,String class_name,
-                   String phone,String email,String dormitory,String address,
-                   String id_type,String id_number,String limits) {
+    private int report;
+    private int check;
+
+    public Student(User user, String student_id, String name, String college_name, String class_name,
+                   String phone, String email, String dormitory, String address,
+                   String id_type, String id_number, int report, int check, String limits) {
         this.setUser_id(user.getUser_id());
         this.setUser_name(user.getUser_name());
         this.setPassword(user.getPassword());
@@ -30,6 +33,8 @@ public class Student extends User implements Cloneable{
         this.address=address;
         this.id_type=id_type;
         this.id_number=id_number;
+        this.report=report;
+        this.check=check;
         this.limits=limits;
     }
 
@@ -120,6 +125,22 @@ public class Student extends User implements Cloneable{
 
     public void setId_number(String id_number) {
         this.id_number = id_number;
+    }
+
+    public int getReport() {
+        return report;
+    }
+
+    public void setReport(int report) {
+        this.report = report;
+    }
+
+    public int getCheck() {
+        return check;
+    }
+
+    public void setCheck(int check) {
+        this.check = check;
     }
 
     public String getLimits() {
