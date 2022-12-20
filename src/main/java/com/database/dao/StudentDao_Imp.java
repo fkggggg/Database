@@ -1,5 +1,6 @@
 package com.database.dao;
 
+import com.database.bean.DailyReport;
 import com.database.bean.Student;
 import com.database.bean.User;
 import com.database.testtime.Testtime;
@@ -10,7 +11,6 @@ import java.time.LocalDate;
 
 public class StudentDao_Imp implements StudentDao{
     private static final String SELECT_STUDENT = "SELECT * from student WHERE user_id=?";
-    private static final String SELECT_DAILY_HEALTH_REPORT = "SELECT * from daily_health_report WHERE student_id=? AND date=?";
     private static final String SELECT_CHECK_REPORT = "SELECT * from check_report WHERE student_id=? ORDER BY date DESC,time DESC";
     private static final String UPDATE_STUDENT = "UPDATE `student` SET `phone`=?,`email`=?,`dormitory`=?,`address`=?,`id_type`=?,`id_number`=? WHERE user_id=?";
 
@@ -22,8 +22,7 @@ public class StudentDao_Imp implements StudentDao{
     @Override
     public Student getStudent(User user) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STUDENT);
-        String USERID = String.valueOf(user.getUser_id());
-        preparedStatement.setString(1,USERID);
+        preparedStatement.setString(1,String.valueOf(user.getUser_id()));
         ResultSet result = preparedStatement.executeQuery();
         //ResultSet没有size参数，通过next()方法判断是否为空
         if (result.next()) {
@@ -51,18 +50,6 @@ public class StudentDao_Imp implements StudentDao{
 
             int report = 0;
             int check = 0;
-            preparedStatement = connection.prepareStatement(SELECT_DAILY_HEALTH_REPORT);
-            LocalDate today = null;
-            try {
-                Testtime testtime = new Testtime();
-                today = testtime.gettestdate();
-            } catch (Exception ignored) {
-            }
-            preparedStatement.setString(1, student_id);
-            preparedStatement.setString(2, today.toString());
-            result = preparedStatement.executeQuery();
-            if(result.next())
-                report = 1;
             preparedStatement = connection.prepareStatement(SELECT_CHECK_REPORT);
             preparedStatement.setString(1, student_id);
             result = preparedStatement.executeQuery();

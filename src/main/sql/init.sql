@@ -81,10 +81,10 @@ CREATE TABLE `daily_health_report` (
                            `location` varchar (50) NOT NULL,
                             PRIMARY KEY (`daily_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='健康日报';
-/* health_condition:健康状况，0表示健康，1表示存在异常，具体异常可填写abnormal_condition进行描述*/
-INSERT INTO `daily_health_report` VALUES ('1', '20301234567', '2022-12-19', '15:30:00', '0', null, '36.2','上海市杨浦区松花江路2500号');
-INSERT INTO `daily_health_report` VALUES ('2', '20301234568', '2022-12-19', '15:30:00', '0', null, '36.2','上海市杨浦区松花江路2500号');
-INSERT INTO `daily_health_report` VALUES ('3', '20301234567', '2022-12-20', '15:30:00', '0', null, '36.2','上海市杨浦区松花江路2500号');
+/* health_condition:健康状况，1表示健康，0表示存在异常，具体异常可填写abnormal_condition进行描述*/
+INSERT INTO `daily_health_report` VALUES ('1', '20301234567', '2022-12-19', '15:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
+INSERT INTO `daily_health_report` VALUES ('2', '20301234568', '2022-12-19', '15:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
+INSERT INTO `daily_health_report` VALUES ('3', '20301234567', '2022-12-20', '15:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
 
 
 DROP TABLE IF EXISTS `check_report`;
