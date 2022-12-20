@@ -47,25 +47,41 @@ public class Controller {
     }
     private static void ClassServer() {
     }
-    private static void StudentServer(User user) throws SQLException {
+    private static void StudentServer(User user) throws SQLException{
         UserDao_Imp userDao_imp = new UserDao_Imp();
         StudentDao_Imp studentDao_imp = new StudentDao_Imp();
-        Student student = studentDao_imp.getStudent(user.getUser_id());
+        Student student = studentDao_imp.getStudent(user);
         while(true)
         {
             int choose = View.StudentView();
-            switch (choose){
-                case 0:
-                    System.exit(-1);
-                case 1:
-                    int choose1 = StudentView.PersonalInformationView(student);
-                    switch (choose1){
-                        case 0:
-                            break;
-                        case 1:
-                            String data = StudentView.EditPersonalInformationView();
-                            System.out.println(data);
+            switch (choose) {
+                case 0 -> System.exit(-1);
+                case 1 -> {
+                    boolean exit = false;
+                    while (!exit) {
+                        int choose1 = StudentView.PersonalInformationView(student);
+                        switch (choose1) {
+                            case 0 -> exit = true;
+                            case 1 -> {
+                                Student editstudent = null;
+                                try {
+                                    editstudent = (Student) student.clone();
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+                                StudentView.EditPersonalInformationView(editstudent);
+                                if (editstudent.getUser_id() != -1) {
+                                    boolean update = studentDao_imp.updateStudent(editstudent);
+                                    if (update) {
+                                        System.out.println("修改成功！");
+                                        student = editstudent;
+                                    } else
+                                        System.out.println("修改失败！");
+                                }
+                            }
+                        }
                     }
+                }
             }
         }
     }

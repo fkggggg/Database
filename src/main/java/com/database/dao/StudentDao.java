@@ -6,5 +6,6 @@ import com.database.bean.User;
 import java.sql.SQLException;
 
 public interface StudentDao {
-    Student getStudent(int user_id) throws SQLException;
+    Student getStudent(User user) throws SQLException;
+    boolean updateStudent(Student student) throws SQLException;
 }

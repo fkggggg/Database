@@ -1,6 +1,6 @@
 package com.database.bean;
 
-public class Student extends User{
+public class Student extends User implements Cloneable{
     private String student_id;
     private String name;
     private String college_name;
@@ -13,9 +13,13 @@ public class Student extends User{
     private String id_number;
     private String limits;
 
-    public Student(String student_id,String name,String college_name,String class_name,
+    public Student(User user,String student_id,String name,String college_name,String class_name,
                    String phone,String email,String dormitory,String address,
                    String id_type,String id_number,String limits) {
+        this.setUser_id(user.getUser_id());
+        this.setUser_name(user.getUser_name());
+        this.setPassword(user.getPassword());
+        this.setPermission(user.getPermission());
         this.student_id=student_id;
         this.name=name;
         this.college_name=college_name;
@@ -31,6 +35,11 @@ public class Student extends User{
 
     public Student(){
 
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public String getStudent_id() {

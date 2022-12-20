@@ -38,27 +38,43 @@ public class StudentView {
         }
     }
 
-    public static String EditPersonalInformationView(){
+    public static Student EditPersonalInformationView(Student student){
         System.out.println("***********************\t\t请选择一项进行修改：\t\t************************");
-        System.out.println("***********************\t\t0：放弃修改\t\t************************");
+        System.out.println("***********************\t\t0：放弃所有修改\t\t************************");
         System.out.println("***********************\t\t1：联系电话\t\t************************");
         System.out.println("***********************\t\t2：电子邮箱\t\t************************");
         System.out.println("***********************\t\t3：宿舍\t\t************************");
         System.out.println("***********************\t\t4：住址\t\t************************");
         System.out.println("***********************\t\t5：证件类型\t\t************************");
         System.out.println("***********************\t\t6：证件号\t\t************************");
+        System.out.println("***********************\t\t7：确认修改\t\t************************");
         String CHOOSE = input.nextLine();
         int choose = Integer.parseInt(CHOOSE);
-        if(choose > -1 && choose < 7)
-        {
+        if(choose == 0) {
+            student.setUser_id(-1);
+            return student;
+        }
+        else if(choose > 0 && choose < 7) {
             System.out.println("***********************\t\t请输入新值：\t\t************************");
             String data = input.nextLine();
-            return CHOOSE+','+data;
+            switch (choose) {
+                case 1 -> student.setPhone(data);
+                case 2 -> student.setEmail(data);
+                case 3 -> student.setDormitory(data);
+                case 4 -> student.setAddress(data);
+                case 5 -> student.setId_type(data);
+                case 6 -> student.setId_number(data);
+                default -> {
+                }
+            }
+            return EditPersonalInformationView(student);
         }
-        else
-        {
+        else if(choose == 7){
+            return student;
+        }
+        else {
             System.out.println("请按提示输入指令！");
-            return EditPersonalInformationView();
+            return EditPersonalInformationView(student);
         }
     }
 }

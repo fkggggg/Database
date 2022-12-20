@@ -11,12 +11,17 @@ import java.sql.SQLException;
 
 public class StudentDao_Imp implements StudentDao{
     private static final String SELECT_STUDENT = "SELECT * from student WHERE user_id=?";
+    private static final String UPDATE_STUDENT = "UPDATE `student` SET `phone`=?,`email`=?,`dormitory`=?,`address`=?,`id_type`=?,`id_number`=? WHERE user_id=?";
+
+    Connection connection = JDBCUtils.getConnection();
+
+    public StudentDao_Imp() throws SQLException {
+    }
 
     @Override
-    public Student getStudent(int user_id) throws SQLException {
-        Connection connection = JDBCUtils.getConnection();
+    public Student getStudent(User user) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STUDENT);
-        String USERID = String.valueOf(user_id);
+        String USERID = String.valueOf(user.getUser_id());
         preparedStatement.setString(1,USERID);
         ResultSet result = preparedStatement.executeQuery();
         //ResultSet没有size参数，通过next()方法判断是否为空
@@ -43,8 +48,29 @@ public class StudentDao_Imp implements StudentDao{
                 limits += " Z";
             if(limits.equals(""))
                 limits += "无进校权限";
-            return new Student(student_id,name,college_name,class_name,phone,email,dormitory,address,id_type,id_number,limits);
+            return new Student(user,student_id,name,college_name,class_name,phone,email,dormitory,address,id_type,id_number,limits);
         }
         return new Student();
+    }
+
+    @Override
+    public boolean updateStudent(Student student) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENT);
+        String phone = student.getPhone();
+        String email = student.getEmail();
+        String dormitory = student.getDormitory();
+        String address = student.getAddress();
+        String id_type = student.getId_type();
+        String id_number = student.getId_number();
+        String user_id = String.valueOf(student.getUser_id());
+        preparedStatement.setString(1,phone);
+        preparedStatement.setString(2,email);
+        preparedStatement.setString(3,dormitory);
+        preparedStatement.setString(4,address);
+        preparedStatement.setString(5,id_type);
+        preparedStatement.setString(6,id_number);
+        preparedStatement.setString(7,user_id);
+        int result = preparedStatement.executeUpdate();
+        return result > 0;
     }
 }
