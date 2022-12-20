@@ -88,11 +88,16 @@ public class View {
         System.out.println("***********************\t\t5：我的出校申请 \t\t************************");
         System.out.println("***********************\t\t6：查看本班数据 \t\t************************");
         String CHOOSE = input.nextLine();
-        int choose = Integer.parseInt(CHOOSE);
-        if(choose > -1 && choose < 7)
-            return choose;
-        else
-        {
+        try{
+            int choose = Integer.parseInt(CHOOSE);
+            if(choose > -1 && choose < 7)
+                return choose;
+            else
+            {
+                System.out.println("请按提示输入指令！");
+                return StudentView();
+            }
+        }catch (NumberFormatException e){
             System.out.println("请按提示输入指令！");
             return StudentView();
         }
