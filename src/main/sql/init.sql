@@ -60,7 +60,7 @@ CREATE TABLE `student` (
                                     `id_type` varchar (20) DEFAULT NULL,
                                     `id_number` varchar (30) DEFAULT NULL ,
                                     `limits_H` int (1) DEFAULT 0,
-                                    `limits_G` int (1) DEFAULT 0,
+                                    `limits_J` int (1) DEFAULT 0,
                                     `limits_F` int (1) DEFAULT 0,
                                     `limits_Z` int (1) DEFAULT 0,
                                     PRIMARY KEY (`user_id`)
@@ -84,7 +84,7 @@ CREATE TABLE `daily_health_report` (
 /* health_condition:健康状况，1表示健康，0表示存在异常，具体异常可填写abnormal_condition进行描述*/
 INSERT INTO `daily_health_report` VALUES ('1', '20301234567', '2022-12-19', '15:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
 INSERT INTO `daily_health_report` VALUES ('2', '20301234568', '2022-12-19', '15:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
-INSERT INTO `daily_health_report` VALUES ('3', '20301234567', '2022-12-20', '15:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
+INSERT INTO `daily_health_report` VALUES ('3', '20301234567', '2022-12-20', '1:30:00', '1', '无', '36.2','上海市杨浦区松花江路2500号');
 
 
 DROP TABLE IF EXISTS `check_report`;
@@ -102,10 +102,10 @@ CREATE TABLE `check_report` (
 INSERT INTO `check_report` VALUES ('1', '20301234567', '2022-12-19', '15:30:00', '0','H');
 INSERT INTO `check_report` VALUES ('2', '20301234567', '2022-12-19', '15:31:00', '1','H');
 INSERT INTO `check_report` VALUES ('3', '20301234567', '2022-12-19', '15:32:00', '0','H');
-INSERT INTO `check_report` VALUES ('4', '20301234567', '2022-12-20', '15:30:00', '0','H');
-INSERT INTO `check_report` VALUES ('5', '20301234567', '2022-12-20', '15:31:00', '1','H');
-INSERT INTO `check_report` VALUES ('6', '20301234567', '2022-12-20', '15:32:00', '0','H');
-INSERT INTO `check_report` VALUES ('7', '20301234567', '2022-12-20', '15:34:00', '1','H');
+INSERT INTO `check_report` VALUES ('4', '20301234567', '2022-12-20', '1:30:00', '0','H');
+INSERT INTO `check_report` VALUES ('5', '20301234567', '2022-12-20', '1:31:00', '1','H');
+INSERT INTO `check_report` VALUES ('6', '20301234567', '2022-12-20', '1:32:00', '0','H');
+INSERT INTO `check_report` VALUES ('7', '20301234567', '2022-12-20', '1:34:00', '1','H');
 
 DROP TABLE IF EXISTS `departure_report_form`;
 CREATE TABLE `departure_report_form` (

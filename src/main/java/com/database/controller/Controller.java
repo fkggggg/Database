@@ -1,8 +1,10 @@
 package com.database.controller;
 
+import com.database.bean.CheckReport;
 import com.database.bean.DailyReport;
 import com.database.bean.Student;
 import com.database.bean.User;
+import com.database.dao.CheckReportDao_Imp;
 import com.database.dao.DailyReportDao_Imp;
 import com.database.dao.StudentDao_Imp;
 import com.database.dao.UserDao_Imp;
@@ -57,6 +59,7 @@ public class Controller {
         UserDao_Imp userDao_imp = new UserDao_Imp();
         StudentDao_Imp studentDao_imp = new StudentDao_Imp();
         DailyReportDao_Imp dailyReportDao_imp = new DailyReportDao_Imp();
+        CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
 
         //获取学生信息
         Student student = studentDao_imp.getStudent(user);
@@ -73,9 +76,16 @@ public class Controller {
             student.setIsreport(1);
         //学生当天未填写健康日报，预先将学号等信息写入健康日报
         else{
+            student.setIsreport(0);
             todayDailyReport.setStudent_id(student.getStudent_id());
             todayDailyReport.setDate(today);
         }
+
+        //获取该学生最新打卡记录
+        CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(student.getStudent_id());
+        student.setIscheck(checkReport.getState());
+        //对于从未打卡过的学生（新生入学？），预先将学号信息写入打卡记录
+        checkReport.setStudent_id(student.getStudent_id());
 
         while(true)
         {
@@ -122,6 +132,27 @@ public class Controller {
                         }else{
                             System.out.println("填写失败！");
                             adddailyreport = StudentView.DailyReportView(todayDailyReport);
+                        }
+                    }
+                }
+                case 3 ->{
+                    boolean exit = false;
+                    while (!exit) {
+                        CheckReport newcheckreport = StudentView.CheckReportView(checkReport);
+                        if(newcheckreport.getCheck_report_id() == -1)
+                        {
+                            int add = checkReportDao_imp.addCheckReport(newcheckreport,student);
+                            if(add == 1){
+                                System.out.println("打卡成功！");
+                                checkReport = checkReportDao_imp.getlatestCheckReport(student.getStudent_id());
+                                student.setIscheck(checkReport.getState());
+                            }else if(add == -1){
+                                System.out.println("打卡失败！");
+                            }else if(add == 0){
+                                System.out.println("没有入校权限！打卡失败！");
+                            }
+                        }else{
+                            exit = true;
                         }
                     }
                 }

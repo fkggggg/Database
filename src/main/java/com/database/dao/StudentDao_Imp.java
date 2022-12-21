@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 public class StudentDao_Imp implements StudentDao{
     private static final String SELECT_STUDENT = "SELECT * from student WHERE user_id=?";
-    private static final String SELECT_CHECK_REPORT = "SELECT * from check_report WHERE student_id=? ORDER BY date DESC,time DESC";
     private static final String UPDATE_STUDENT = "UPDATE `student` SET `phone`=?,`email`=?,`dormitory`=?,`address`=?,`id_type`=?,`id_number`=? WHERE user_id=?";
 
     Connection connection = JDBCUtils.getConnection();
@@ -36,27 +35,23 @@ public class StudentDao_Imp implements StudentDao{
             String address = result.getString("address");
             String id_type = result.getString("id_type");
             String id_number = result.getString("id_number");
+            int limits_H = result.getInt("limits_H");
+            int limits_J = result.getInt("limits_J");
+            int limits_F = result.getInt("limits_F");
+            int limits_Z = result.getInt("limits_Z");
             String limits = "";
-            if (result.getInt("limits_H") == 0)
+            if (limits_H == 0)
                 limits += " H";
-            if (result.getInt("limits_G") == 0)
-                limits += " G";
-            if (result.getInt("limits_F") == 0)
+            if (limits_J == 0)
+                limits += " J";
+            if (limits_F == 0)
                 limits += " F";
-            if (result.getInt("limits_Z") == 0)
+            if (limits_Z == 0)
                 limits += " Z";
             if (limits.equals(""))
                 limits += "无进校权限";
 
-            int report = 0;
-            int check = 0;
-            preparedStatement = connection.prepareStatement(SELECT_CHECK_REPORT);
-            preparedStatement.setString(1, student_id);
-            result = preparedStatement.executeQuery();
-            if(result.next())
-                if(result.getInt("state") == 1)
-                    check = 1;
-            return new Student(user, student_id, name, college_name, class_name, phone, email, dormitory, address, id_type, id_number, report, check, limits);
+            return new Student(user, student_id, name, college_name, class_name, phone, email, dormitory, address, id_type, id_number, limits_H, limits_J, limits_F, limits_Z, limits);
         }
         return new Student();
     }

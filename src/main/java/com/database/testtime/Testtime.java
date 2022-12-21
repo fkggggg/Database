@@ -9,6 +9,7 @@ import java.time.LocalTime;
 //定义一个系统时间，方便测试用
 public class Testtime {
     LocalDate date = LocalDate.of(2022, 12, 20);
+    //时间可用真实时间，避免打卡时间重复
     LocalTime time = LocalTime.of(16, 30, 30);
 
     public Testtime() throws ParseException {

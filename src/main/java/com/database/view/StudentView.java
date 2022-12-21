@@ -1,10 +1,12 @@
 package com.database.view;
 
+import com.database.bean.CheckReport;
 import com.database.bean.DailyReport;
 import com.database.bean.Student;
 import com.database.testtime.Testtime;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 
@@ -47,6 +49,7 @@ public class StudentView {
         }
     }
 
+    //修改个人信息
     public static Student EditPersonalInformationView(Student student){
         System.out.println("***********************\t\t请选择一项进行修改：\t\t************************");
         System.out.println("***********************\t\t0：放弃所有修改\t\t************************");
@@ -91,7 +94,7 @@ public class StudentView {
             return EditPersonalInformationView(student);
         }
     }
-
+    //健康日报
     public static DailyReport DailyReportView(DailyReport dailyReport) throws ParseException {
         System.out.println("***********************\t\t健康日报\t\t\t\t************************");
         if(dailyReport.getDaily_report_id()!=-1) {
@@ -163,9 +166,7 @@ public class StudentView {
                     String CHOOSE3 = input.nextLine();
                     int choose3 = Integer.parseInt(CHOOSE3);
 
-                    //此处在真实应用中可更改为真实时间，为防止测试时与预先写入的数据冲突，使用测试时间
-                    Testtime testtime = new Testtime();
-                    LocalTime time = testtime.gettesttime();
+                    LocalTime time = LocalTime.now();
 
                     if(choose3 == 0) {
                         return new DailyReport(-1,dailyReport.getStudent_id(),dailyReport.getDate(),time,health_condition,abnormal_description,temperature,location);
@@ -183,6 +184,64 @@ public class StudentView {
                 System.out.println("请按提示输入指令！");
                 return DailyReportView(dailyReport);
             }
+        }
+    }
+
+    //打卡记录
+    public static CheckReport CheckReportView(CheckReport checkReport){
+        int state = checkReport.getState();
+        System.out.println("***********************\t\t打卡记录\t\t\t\t************************");
+        System.out.println("\t\t当前状态：" + (state==0?"离校":"在校"));
+        if(checkReport.getState()==1)
+            System.out.println("\t\t所在校区：" + checkReport.getCampus());
+        System.out.println("***********************\t\t操作\t\t\t\t\t************************");
+        System.out.println("***********************\t\t0：返回上一页面\t\t************************");
+        System.out.println("***********************\t\t1："+(state==0?"入校":"出校")+"\t\t\t\t************************");
+        String CHOOSE = input.nextLine();
+        try{
+            int choose = Integer.parseInt(CHOOSE);
+            if (choose == 0) {
+                return checkReport;
+            }
+            else if (choose == 1){
+                if(state == 0){
+                    System.out.println("***********************\t\t选择进入校区：\t\t\t************************");
+                    System.out.println("***********************\t\t0：H\t\t\t\t************************");
+                    System.out.println("***********************\t\t1：J\t\t\t\t************************");
+                    System.out.println("***********************\t\t2：F\t\t\t\t************************");
+                    System.out.println("***********************\t\t3：Z\t\t\t\t************************");
+                    String CHOOSE2 = input.nextLine();
+                    int choose2 = Integer.parseInt(CHOOSE2);
+                    char campus;
+                    switch (choose2) {
+                        case 0 -> campus = 'H';
+                        case 1 -> campus = 'J';
+                        case 2 -> campus = 'F';
+                        case 3 -> campus = 'Z';
+                        default -> {
+                            System.out.println("请按提示输入指令！");
+                            return CheckReportView(checkReport);
+                        }
+                    }
+                    //此处在真实应用中应更改为真实日期，为防止测试时因学生未填写健康日报导致失去权限，使用测试日期
+                    Testtime testtime1 = new Testtime();
+                    LocalDate date = testtime1.gettestdate();
+                    LocalTime time = LocalTime.now();
+                    return new CheckReport(-1,checkReport.getStudent_id(),date,time,1,campus);
+                }else{
+                    //此处在真实应用中应更改为真实时间，为防止测试时与预先写入的数据冲突，使用测试时间
+                    Testtime testtime2 = new Testtime();
+                    LocalDate date = testtime2.gettestdate();
+                    LocalTime time = LocalTime.now();
+                    return new CheckReport(-1,checkReport.getStudent_id(),date,time,0,checkReport.getCampus());
+                }
+            }else {
+                System.out.println("请按提示输入指令！");
+                return CheckReportView(checkReport);
+            }
+        }catch (Exception e){
+            System.out.println("请按提示输入指令！");
+            return CheckReportView(checkReport);
         }
     }
 }

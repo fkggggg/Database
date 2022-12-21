@@ -11,6 +11,10 @@ public class Student extends User implements Cloneable{
     private String address;
     private String id_type;
     private String id_number;
+    private int limits_H;
+    private int limits_J;
+    private int limits_F;
+    private int limits_Z;
     private String limits;
 
     private int isreport;
@@ -18,7 +22,8 @@ public class Student extends User implements Cloneable{
 
     public Student(User user, String student_id, String name, String college_name, String class_name,
                    String phone, String email, String dormitory, String address,
-                   String id_type, String id_number, int isreport, int ischeck, String limits) {
+                   String id_type, String id_number,
+                   int limits_H, int limits_J, int limits_F, int limits_Z, String limits) {
         this.setUser_id(user.getUser_id());
         this.setUser_name(user.getUser_name());
         this.setPassword(user.getPassword());
@@ -33,8 +38,10 @@ public class Student extends User implements Cloneable{
         this.address=address;
         this.id_type=id_type;
         this.id_number=id_number;
-        this.isreport=isreport;
-        this.ischeck=ischeck;
+        this.limits_H=limits_H;
+        this.limits_J=limits_J;
+        this.limits_F=limits_F;
+        this.limits_Z=limits_Z;
         this.limits=limits;
     }
 
@@ -141,6 +148,38 @@ public class Student extends User implements Cloneable{
 
     public void setIscheck(int ischeck) {
         this.ischeck = ischeck;
+    }
+
+    public int getLimits_H() {
+        return limits_H;
+    }
+
+    public void setLimits_H(int limits_H) {
+        this.limits_H = limits_H;
+    }
+
+    public int getLimits_J() {
+        return limits_J;
+    }
+
+    public void setLimits_J(int limits_J) {
+        this.limits_J = limits_J;
+    }
+
+    public int getLimits_F() {
+        return limits_F;
+    }
+
+    public void setLimits_F(int limits_F) {
+        this.limits_F = limits_F;
+    }
+
+    public int getLimits_Z() {
+        return limits_Z;
+    }
+
+    public void setLimits_Z(int limits_Z) {
+        this.limits_Z = limits_Z;
     }
 
     public String getLimits() {
