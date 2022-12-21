@@ -136,7 +136,6 @@ CREATE TABLE `admission_form` (
                                          `class_name` varchar (20) NOT NULL,
                                          `reason` varchar (200) DEFAULT NULL,
                                          `estimated_date` date NOT NULL,
-                                         `estimated_time` time NOT NULL,
                                          `state` int(1) DEFAULT 0,
                                          `reject_reason` varchar(200) DEFAULT NULL,
                                          PRIMARY KEY (`adform_id`)

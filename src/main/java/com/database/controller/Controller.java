@@ -55,6 +55,7 @@ public class Controller {
         DailyReportDao_Imp dailyReportDao_imp = new DailyReportDao_Imp();
         CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
         DepartureFormDao_Imp departureFormDao_imp = new DepartureFormDao_Imp();
+        AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
 
         //获取学生信息
         Student student = studentDao_imp.getStudent(user);
@@ -82,6 +83,16 @@ public class Controller {
         //对于从未打卡过的学生（新生入学？），预先将学号信息写入打卡记录
         checkReport.setStudent_id(student.getStudent_id());
 
+        //获取该学生最新入校申请表
+        AdmissionForm admissionForm = admissionFormDao_imp.getmyAdmissionForm(student.getStudent_id());
+        //若无待审核的入校申请表，表单中预先写入信息
+        if(admissionForm.getAdform_id() == -1) {
+            admissionForm.setStudent_id(student.getStudent_id());
+            admissionForm.setName(student.getName());
+            admissionForm.setCollege_name(student.getCollege_name());
+            admissionForm.setClass_name(student.getClass_name());
+        }
+
         //获取该学生最新离校申请表
         DepartureForm departureForm = departureFormDao_imp.getmyDepartureForm(student.getStudent_id());
         //若无待审核的离校申请表，表单中预先写入信息
@@ -91,6 +102,7 @@ public class Controller {
             departureForm.setCollege_name(student.getCollege_name());
             departureForm.setClass_name(student.getClass_name());
         }
+
         while(true)
         {
             int choose = View.StudentView();
@@ -152,6 +164,32 @@ public class Controller {
                                 System.out.println("打卡失败！");
                             }else if(add == 0){
                                 System.out.println("没有入校权限！打卡失败！");
+                            }
+                        }else{
+                            exit = true;
+                        }
+                    }
+                }
+                case 4 ->{
+                    boolean exit = false;
+                    while (!exit) {
+                        AdmissionForm newadmissionform = StudentView.AdmissionFormView(admissionForm);
+                        if(newadmissionform.getAdform_id() == admissionForm.getAdform_id() && newadmissionform.getStudent_id() == null)
+                        {
+                            boolean delete = admissionFormDao_imp.deleteAdmissionForm(newadmissionform.getAdform_id());
+                            if(delete){
+                                System.out.println("撤销成功！");
+                                admissionForm = admissionFormDao_imp.getmyAdmissionForm(student.getStudent_id());
+                            }else{
+                                System.out.println("撤销失败！");
+                            }
+                        }else if(newadmissionform.getAdform_id() == -1){
+                            boolean add = admissionFormDao_imp.addAdmissionForm(newadmissionform);
+                            if(add){
+                                System.out.println("申请成功！");
+                                admissionForm = admissionFormDao_imp.getmyAdmissionForm(student.getStudent_id());
+                            }else{
+                                System.out.println("申请失败！");
                             }
                         }else{
                             exit = true;
