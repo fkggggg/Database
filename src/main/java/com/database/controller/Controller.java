@@ -1,13 +1,7 @@
 package com.database.controller;
 
-import com.database.bean.CheckReport;
-import com.database.bean.DailyReport;
-import com.database.bean.Student;
-import com.database.bean.User;
-import com.database.dao.CheckReportDao_Imp;
-import com.database.dao.DailyReportDao_Imp;
-import com.database.dao.StudentDao_Imp;
-import com.database.dao.UserDao_Imp;
+import com.database.bean.*;
+import com.database.dao.*;
 import com.database.testtime.Testtime;
 import com.database.view.StudentView;
 import com.database.view.View;
@@ -60,6 +54,7 @@ public class Controller {
         StudentDao_Imp studentDao_imp = new StudentDao_Imp();
         DailyReportDao_Imp dailyReportDao_imp = new DailyReportDao_Imp();
         CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
+        DepartureFormDao_Imp departureFormDao_imp = new DepartureFormDao_Imp();
 
         //获取学生信息
         Student student = studentDao_imp.getStudent(user);
@@ -87,6 +82,15 @@ public class Controller {
         //对于从未打卡过的学生（新生入学？），预先将学号信息写入打卡记录
         checkReport.setStudent_id(student.getStudent_id());
 
+        //获取该学生最新离校申请表
+        DepartureForm departureForm = departureFormDao_imp.getmyDepartureForm(student.getStudent_id());
+        //若无待审核的离校申请表，表单中预先写入信息
+        if(departureForm.getDeform_id() == -1) {
+            departureForm.setStudent_id(student.getStudent_id());
+            departureForm.setName(student.getName());
+            departureForm.setCollege_name(student.getCollege_name());
+            departureForm.setClass_name(student.getClass_name());
+        }
         while(true)
         {
             int choose = View.StudentView();
@@ -128,10 +132,8 @@ public class Controller {
                             System.out.println("填写成功！");
                             todayDailyReport = dailyReportDao_imp.getDailyReport(student.getStudent_id(),today);
                             student.setIsreport(1);
-                            adddailyreport = StudentView.DailyReportView(todayDailyReport);
                         }else{
                             System.out.println("填写失败！");
-                            adddailyreport = StudentView.DailyReportView(todayDailyReport);
                         }
                     }
                 }
@@ -150,6 +152,32 @@ public class Controller {
                                 System.out.println("打卡失败！");
                             }else if(add == 0){
                                 System.out.println("没有入校权限！打卡失败！");
+                            }
+                        }else{
+                            exit = true;
+                        }
+                    }
+                }
+                case 5 ->{
+                    boolean exit = false;
+                    while (!exit) {
+                        DepartureForm newdepartureform = StudentView.DepartureFormView(departureForm);
+                        if(newdepartureform.getDeform_id() == departureForm.getDeform_id() && newdepartureform.getStudent_id() == null)
+                        {
+                            boolean delete = departureFormDao_imp.deleteDepartureForm(newdepartureform.getDeform_id());
+                            if(delete){
+                                System.out.println("撤销成功！");
+                                departureForm = departureFormDao_imp.getmyDepartureForm(student.getStudent_id());
+                            }else{
+                                System.out.println("撤销失败！");
+                            }
+                        }else if(newdepartureform.getDeform_id() == -1){
+                            boolean add = departureFormDao_imp.addDepartureForm(newdepartureform);
+                            if(add){
+                                System.out.println("申请成功！");
+                                departureForm = departureFormDao_imp.getmyDepartureForm(student.getStudent_id());
+                            }else{
+                                System.out.println("申请失败！");
                             }
                         }else{
                             exit = true;

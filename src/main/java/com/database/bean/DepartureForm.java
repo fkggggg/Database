@@ -13,7 +13,6 @@ public class DepartureForm {
     private String reason;
     private String destination;
     private LocalDate estimated_date;
-    private LocalTime estimated_time;
     private LocalDate return_date;
     private int state;
     private String reject_reason;
@@ -28,7 +27,7 @@ public class DepartureForm {
 
     public DepartureForm(int deform_id, LocalDate application_date, String student_id, String name,
                          String college_name, String class_name, String reason, String destination,
-                         LocalDate estimated_date, LocalTime estimated_time, LocalDate return_date){
+                         LocalDate estimated_date, LocalDate return_date){
         this.deform_id=deform_id;
         this.application_date=application_date;
         this.student_id=student_id;
@@ -38,13 +37,12 @@ public class DepartureForm {
         this.reason=reason;
         this.destination=destination;
         this.estimated_date=estimated_date;
-        this.estimated_time=estimated_time;
         this.return_date=return_date;
     }
 
     public DepartureForm(int deform_id, LocalDate application_date, String student_id, String name,
                          String college_name, String class_name, String reason, String destination,
-                         LocalDate estimated_date, LocalTime estimated_time, LocalDate return_date,
+                         LocalDate estimated_date, LocalDate return_date,
                          int state, String reject_reason){
         this.deform_id=deform_id;
         this.application_date=application_date;
@@ -55,7 +53,6 @@ public class DepartureForm {
         this.reason=reason;
         this.destination=destination;
         this.estimated_date=estimated_date;
-        this.estimated_time=estimated_time;
         this.return_date=return_date;
         this.state=state;
         this.reject_reason=reject_reason;
@@ -131,14 +128,6 @@ public class DepartureForm {
 
     public void setEstimated_date(LocalDate estimated_date) {
         this.estimated_date = estimated_date;
-    }
-
-    public LocalTime getEstimated_time() {
-        return estimated_time;
-    }
-
-    public void setEstimated_time(LocalTime estimated_time) {
-        this.estimated_time = estimated_time;
     }
 
     public LocalDate getReturn_date() {

@@ -2,12 +2,14 @@ package com.database.view;
 
 import com.database.bean.CheckReport;
 import com.database.bean.DailyReport;
+import com.database.bean.DepartureForm;
 import com.database.bean.Student;
 import com.database.testtime.Testtime;
 
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class StudentView {
@@ -229,7 +231,7 @@ public class StudentView {
                     LocalTime time = LocalTime.now();
                     return new CheckReport(-1,checkReport.getStudent_id(),date,time,1,campus);
                 }else{
-                    //此处在真实应用中应更改为真实时间，为防止测试时与预先写入的数据冲突，使用测试时间
+                    //此处在真实应用中应更改为真实日期，为防止测试时因学生未填写健康日报导致失去权限，使用测试日期
                     Testtime testtime2 = new Testtime();
                     LocalDate date = testtime2.gettestdate();
                     LocalTime time = LocalTime.now();
@@ -243,5 +245,121 @@ public class StudentView {
             System.out.println("请按提示输入指令！");
             return CheckReportView(checkReport);
         }
+    }
+
+    public static DepartureForm DepartureFormView(DepartureForm departureForm){
+        System.out.println("***********************\t\t离校申请表\t\t\t************************");
+        if(departureForm.getDeform_id() == -1){
+            System.out.println("***********************\t\t当前无待审核离校申请表\t************************");
+            System.out.println("***********************\t\t操作\t\t\t\t\t************************");
+            System.out.println("***********************\t\t0：返回上一页面\t\t************************");
+            System.out.println("***********************\t\t1：提交离校申请表\t\t************************");
+            String CHOOSE = input.nextLine();
+            try{
+                int choose = Integer.parseInt(CHOOSE);
+                if (choose == 0) {
+                    return new DepartureForm(0);
+                }else if(choose == 1){
+                    DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    int check=0;
+                    LocalDate estimated_date=null;
+                    LocalDate return_date=null;
+
+                    System.out.println("***********************\t\t离校理由：\t\t\t************************");
+                    String reason = input.nextLine();
+                    System.out.println("***********************\t\t请输入目的地：\t\t\t************************");
+                    String destination = input.nextLine();
+                    while(check == 0)
+                    {
+                        System.out.println("***********************\t\t请输入预计离校日期(格式:年-月-日，示例：2022-12-25)：");
+                        estimated_date = LocalDate.parse(input.nextLine(),df1);
+                        if(estimated_date.isBefore(LocalDate.now()))
+                            System.out.println("离校日期不能晚于今天日期！");
+                        else
+                            check = 1;
+                    }
+                    while(check == 1)
+                    {
+                        System.out.println("***********************\t\t请输入预计返校日期(格式:年-月-日，示例：2022-12-25)：\t************************");
+                        return_date = LocalDate.parse(input.nextLine(),df1);
+                        if(return_date.isBefore(estimated_date))
+                            System.out.println("返校日期不能早于离校日期！");
+                        else
+                            check = 0;
+                    }
+                    System.out.println("***********************\t\t离校申请表填写\t\t\t************************");
+                    System.out.println("\t\t离校理由：" + reason);
+                    System.out.println("\t\t目的地：" + destination);
+                    System.out.println("\t\t预计离校日期：" + estimated_date.toString());
+                    System.out.println("\t\t预计返校日期：" + return_date.toString());
+                    System.out.println("***********************\t\t是否确认提交：\t\t\t************************");
+                    System.out.println("***********************\t\t0：是\t\t\t\t************************");
+                    System.out.println("***********************\t\t1：否\t\t\t\t************************");
+                    String CHOOSE3 = input.nextLine();
+                    int choose3 = Integer.parseInt(CHOOSE3);
+                    Testtime testtime = new Testtime();
+                    if(choose3 == 0) {
+                        return new DepartureForm(-1,testtime.gettestdate(),departureForm.getStudent_id(),departureForm.getName(),
+                                departureForm.getCollege_name(),departureForm.getClass_name(),reason,destination,estimated_date,return_date);
+                    }else if(choose3 == 1){
+                        return DepartureFormView(departureForm);
+                    }else{
+                        System.out.println("请按提示输入指令！");
+                        return DepartureFormView(departureForm);
+                    }
+                } else {
+                    System.out.println("请按提示输入指令！");
+                    return DepartureFormView(departureForm);
+                }
+            }catch (Exception e){
+                System.out.println("请按提示输入指令！");
+                return DepartureFormView(departureForm);
+            }
+        }else{
+            String statestr="";
+            int state = departureForm.getState();
+            switch (state) {
+                case 0 -> statestr += "班级辅导员审核中";
+                case 1 -> statestr += "院系管理员审核中";
+                case 2 -> statestr += "已通过";
+                case -1 -> statestr += "班级辅导员已拒绝";
+                case -2 -> statestr += "院系管理员已拒绝";
+            }
+            System.out.println("***********************\t\t我的离校申请\t\t\t************************");
+            System.out.println("\t\t申请日期：" + departureForm.getApplication_date().toString());
+            System.out.println("\t\t离校理由：" + departureForm.getReason());
+            System.out.println("\t\t目的地：" + departureForm.getDestination());
+            System.out.println("\t\t预计离校日期：" + departureForm.getEstimated_date().toString());
+            System.out.println("\t\t预计返校日期：" + departureForm.getReturn_date().toString());
+            System.out.println("\t\t状态：" + statestr);
+            if(state == -1 || state == -2)
+                System.out.println("\t\t拒绝理由：" + departureForm.getReject_reason());
+            System.out.println("***********************\t\t操作\t\t\t\t\t************************");
+            System.out.println("***********************\t\t0：返回上一页面\t\t************************");
+            System.out.println("***********************\t\t1：撤销离校申请表\t\t************************");
+            String CHOOSE = input.nextLine();
+            try{
+                int choose = Integer.parseInt(CHOOSE);
+                if (choose == 0) {
+                    return departureForm;
+                }else if(choose == 1) {
+                    System.out.println("确认要撤销吗？该操作不可逆！ 0:确认撤销 1：返回");
+                    String CHOOSE2 = input.nextLine();
+                    int choose2 = Integer.parseInt(CHOOSE2);
+                    if(choose2==0){
+                        return new DepartureForm(departureForm.getDeform_id());
+                    }else if(choose2==1){
+                        return DepartureFormView(departureForm);
+                    }else{
+                        System.out.println("请按提示输入指令！");
+                        return DepartureFormView(departureForm);
+                    }
+                }
+            }catch (Exception e){
+                System.out.println("请按提示输入指令！");
+                return DepartureFormView(departureForm);
+            }
+        }
+        return new DepartureForm(-3);
     }
 }
