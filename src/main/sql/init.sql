@@ -107,11 +107,11 @@ INSERT INTO `check_report` VALUES ('5', '20301234567', '2022-12-20', '1:31:00', 
 INSERT INTO `check_report` VALUES ('6', '20301234567', '2022-12-20', '1:32:00', '0','H');
 INSERT INTO `check_report` VALUES ('7', '20301234567', '2022-12-20', '1:34:00', '1','H');
 
-DROP TABLE IF EXISTS `departure_report_form`;
-CREATE TABLE `departure_report_form` (
+DROP TABLE IF EXISTS `departure_form`;
+CREATE TABLE `departure_form` (
                                 `deform_id` int(20) NOT NULL AUTO_INCREMENT,
                                 `application_date` date NOT NULL,
-                                `student_id` int(20) NOT NULL,
+                                `student_id` char(11) NOT NULL,
                                 `name` varchar(20) NOT NULL,
                                 `college_name` varchar (20) NOT NULL,
                                 `class_name` varchar (20) NOT NULL,
@@ -124,12 +124,14 @@ CREATE TABLE `departure_report_form` (
                                 `reject_reason` varchar(200) DEFAULT NULL,
                                 PRIMARY KEY (`deform_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='出校申请表';
+/* state:状态，0学生填表提交，班级辅导员审核中。1：班级辅导员同意，院系负责人审核中。2：院系负责人同意。-1：班级辅导员拒绝。-2：院系管理员拒绝。-3：学生取消申请*/
 
-DROP TABLE IF EXISTS `admission_report_form`;
-CREATE TABLE `admission_report_form` (
+
+DROP TABLE IF EXISTS `admission_form`;
+CREATE TABLE `admission_form` (
                                          `adform_id` int(20) NOT NULL AUTO_INCREMENT,
                                          `application_date` date NOT NULL,
-                                         `student_id` int(20) NOT NULL,
+                                         `student_id` char(11) NOT NULL,
                                          `name` varchar(20) NOT NULL,
                                          `college_name` varchar (20) NOT NULL,
                                          `class_name` varchar (20) NOT NULL,
