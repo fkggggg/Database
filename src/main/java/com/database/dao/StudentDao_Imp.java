@@ -76,4 +76,21 @@ public class StudentDao_Imp implements StudentDao{
         int result = preparedStatement.executeUpdate();
         return result > 0;
     }
+
+    @Override
+    public Student getStudentByStuid(String stu_id) throws SQLException {
+        String sql = "SELECT user_id from student WHERE student_id=?";
+        PreparedStatement preparedStatement0 = connection.prepareStatement(sql);
+        preparedStatement0.setString(1, stu_id);
+        ResultSet result0 = preparedStatement0.executeQuery();
+        //ResultSet没有size参数，通过next()方法判断是否为空
+        if (result0.next()) {
+            String user_id = result0.getString("user_id");
+            User user = new User(user_id, "");
+
+            return getStudent(user);
+        }
+        else
+            return null;
+    }
 }

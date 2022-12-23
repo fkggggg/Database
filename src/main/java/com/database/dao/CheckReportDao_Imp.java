@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CheckReportDao_Imp implements CheckReportDao{
     private static final String ADD_DAILY_HEALTH_REPORT = "INSERT INTO `check_report` VALUES (null,?, ?, ?, ?, ?)";
@@ -70,5 +72,25 @@ public class CheckReportDao_Imp implements CheckReportDao{
             return new CheckReport(check_report_id,student_id, date, time, state, campus);
         }
         return new CheckReport();
+    }
+
+    @Override
+    public List<CheckReport> getAllCheckReport(String student_id) throws SQLException {
+        String sql = "SELECT * from check_report WHERE student_id=? ORDER BY date DESC,time DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, student_id);
+        ResultSet result = preparedStatement.executeQuery();
+        List<CheckReport> list = new ArrayList<>();
+        while(result.next()) {
+            int check_report_id = result.getInt("check_report_id");
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(result.getString("date"),df1);
+            DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalTime time = LocalTime.parse(result.getString("time"),df2);
+            int state = result.getInt("state");
+            char campus = result.getString("campus").charAt(0);
+            list.add(new CheckReport(check_report_id,student_id, date, time, state, campus)) ;
+        }
+        return list;
     }
 }

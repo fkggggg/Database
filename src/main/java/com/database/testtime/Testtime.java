@@ -29,4 +29,11 @@ public class Testtime {
         return time;
     }
 
+    public void setTestDate(LocalDate date1){
+        this.date = date1;
+    }
+    public void setTestTime(LocalTime time1){
+        this.time = time1;
+    }
+
 }

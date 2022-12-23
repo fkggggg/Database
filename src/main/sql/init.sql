@@ -49,7 +49,7 @@ INSERT into `class_instructor` VALUES ('3','00002','班级辅导员测试','学�
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
                                     `user_id` int(20) NOT NULL,
-                                    `student_id` char(11) NOT NULL,
+                                    `student_id` char(11) NOT NULL UNIQUE ,
                                     `name` varchar(20) NOT NULL,
                                     `college_name` varchar (20) NOT NULL,
                                     `class_name` varchar (20) NOT NULL,

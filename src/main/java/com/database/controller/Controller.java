@@ -2,6 +2,7 @@ package com.database.controller;
 
 import com.database.bean.*;
 import com.database.dao.*;
+import com.database.service.Search;
 import com.database.testtime.Testtime;
 import com.database.view.StudentView;
 import com.database.view.View;
@@ -10,8 +11,14 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
 
+import static com.database.service.Handle.handleAdmission;
+import static com.database.service.Handle.handleDeparture;
+import static com.database.service.Search.DevelopSearch;
+import static com.database.service.Search.StuSearch;
+import static com.database.view.View.*;
+
 public class Controller {
-    public static void main(String arg[]) throws SQLException, ParseException {
+    public static void main(String arg[]) throws Exception {
 
         while(true)
         {
@@ -23,15 +30,15 @@ public class Controller {
                 case -1 -> System.out.println("用户名与密码不匹配，请重新输入！");
                 case 0 -> {
                     System.out.println("超级管理员登录！");
-                    SchoolServer();
+                    SchoolServer(user);
                 }
                 case 1 -> {
                     System.out.println("院系管理员登录！");
-                    CollegeServer();
+                    CollegeServer(user);
                 }
                 case 2 -> {
                     System.out.println("班级辅导员登录！");
-                    ClassServer();
+                    ClassServer(user);
                 }
                 case 3 -> {
                     System.out.println("学生登录！");
@@ -43,11 +50,96 @@ public class Controller {
         }
     }
 
-    private static void SchoolServer() {
+    private static void SchoolServer(User user) throws Exception {
+        /*
+        学校管理
+        0：退出
+        1：查询学生信息
+        2：进阶查询
+        */
+        int opt = SchoolView();
+        switch (opt){
+            case 0: return;
+
+            case 1:
+                StuSearch(user);
+                break;
+
+            case 2:
+                int dev_opt = DevelopSearchView();
+                DevelopSearch(user, dev_opt);
+                break;
+
+            default:
+                System.out.println("error!");
+        }
     }
-    private static void CollegeServer() {
+    private static void CollegeServer(User user) throws Exception {
+        /* 学院管理
+        0：退出
+        1：查询学生信息
+        2：查询入校申请
+        3：查询出校申请
+        4：进阶查询
+        */
+
+        int opt = CollegeView();
+        switch (opt){
+            case 0: return;
+
+            case 1:
+                StuSearch(user);
+                break;
+
+            case 2:
+                handleAdmission(user);
+                break;
+
+            case 3:
+                handleDeparture(user);
+                break;
+
+            case 4:
+                int dev_opt = DevelopSearchView();
+                DevelopSearch(user, dev_opt);
+                break;
+
+            default:
+                System.out.println("error!");
+        }
     }
-    private static void ClassServer() {
+    private static void ClassServer(User user) throws Exception {
+        /*班级管理
+        0：退出
+        1：查询学生信息
+        2：查询并处理入校申请
+        3：查询出校申请
+        4：进阶查询
+        */
+        int opt = ClassView();
+        switch (opt){
+            case 0: return;
+
+            case 1:
+                StuSearch(user);
+                break;
+
+            case 2:
+                handleAdmission(user);
+                break;
+
+            case 3:
+                handleDeparture(user);
+                break;
+
+            case 4:
+                int dev_opt = DevelopSearchView();
+                DevelopSearch(user, dev_opt);
+                break;
+
+            default:
+                System.out.println("error!");
+        }
     }
     private static void StudentServer(User user) throws SQLException, ParseException {
         UserDao_Imp userDao_imp = new UserDao_Imp();

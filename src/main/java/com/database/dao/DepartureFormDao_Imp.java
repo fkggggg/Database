@@ -1,5 +1,6 @@
 package com.database.dao;
 
+import com.database.bean.AdmissionForm;
 import com.database.bean.DailyReport;
 import com.database.bean.DepartureForm;
 import com.database.bean.Student;
@@ -12,6 +13,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DepartureFormDao_Imp implements DepartureFormDao {
     private static final String ADD_DEPARTURE_FORM = "INSERT INTO `departure_form` VALUES (null,?, ?, ?, ?, ?, ?, ?, ?, ?,0,null)";
@@ -70,6 +73,33 @@ public class DepartureFormDao_Imp implements DepartureFormDao {
                     reason, destination, estinated_date, return_date, state, reject_reason);
         }
         return new DepartureForm(-1);
+    }
+
+    @Override
+    public List<DepartureForm> getAllDepartureForm(String student_id) throws SQLException {
+        String sql = "SELECT * from departure_form WHERE student_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,student_id);
+        ResultSet result = preparedStatement.executeQuery();
+        List<DepartureForm> departureFormList = new ArrayList<>();
+        while(result.next())
+        {
+            int deform_id = result.getInt("deform_id");
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate application_date = LocalDate.parse(result.getString("application_date"),df1);
+            String name = result.getString("name");
+            String college_name = result.getString("college_name");
+            String class_name = result.getString("class_name");
+            String reason = result.getString("reason");
+            String destination = result.getString("destination");
+            LocalDate estinated_date = LocalDate.parse(result.getString("estimated_date"),df1);
+            LocalDate return_date = LocalDate.parse(result.getString("return_date"),df1);
+            int state = result.getInt("state");
+            String reject_reason = result.getString("reject_reason");
+            departureFormList.add( new DepartureForm(deform_id, application_date, student_id, name, college_name, class_name,
+                    reason, destination, estinated_date, return_date, state, reject_reason));
+        }
+        return departureFormList;
     }
 
 }
