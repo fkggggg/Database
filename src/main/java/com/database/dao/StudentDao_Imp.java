@@ -8,6 +8,8 @@ import com.database.jdbc.JDBCUtils;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDao_Imp implements StudentDao{
     private static final String SELECT_STUDENT = "SELECT * from student WHERE user_id=?";
@@ -85,12 +87,65 @@ public class StudentDao_Imp implements StudentDao{
         ResultSet result0 = preparedStatement0.executeQuery();
         //ResultSet没有size参数，通过next()方法判断是否为空
         if (result0.next()) {
-            String user_id = result0.getString("user_id");
-            User user = new User(user_id, "");
+            int user_id = result0.getInt("user_id");
+            User user = new User(user_id,"", "");
 
             return getStudent(user);
         }
         else
             return null;
+    }
+
+    @Override
+    public List<Student> getAllStudent(int perm, String range) throws SQLException {
+        String sql;
+        switch (perm){
+            case 0:
+                sql = "SELECT * from student";
+                break;
+            case 1:
+                sql = "SELECT * from student where college_name =" + range;
+                break;
+            case 2:
+                sql = "SELECT * from student where class_name =" + range;
+                break;
+            default: return null;
+        }
+        PreparedStatement preparedStatement0 = connection.prepareStatement(sql);
+        ResultSet result = preparedStatement0.executeQuery();
+        List<Student> list = new ArrayList<>();
+        while (result.next()){
+            int userid = result.getInt("user_id");
+            String student_id = result.getString("student_id");
+            String name = result.getString("name");
+            String college_name = result.getString("college_name");
+            String class_name = result.getString("class_name");
+            String phone = result.getString("phone");
+            String email = result.getString("email");
+            String dormitory = result.getString("dormitory");
+            String address = result.getString("address");
+            String id_type = result.getString("id_type");
+            String id_number = result.getString("id_number");
+            int limits_H = result.getInt("limits_H");
+            int limits_J = result.getInt("limits_J");
+            int limits_F = result.getInt("limits_F");
+            int limits_Z = result.getInt("limits_Z");
+            String limits = "";
+            if (limits_H == 0)
+                limits += " H";
+            if (limits_J == 0)
+                limits += " J";
+            if (limits_F == 0)
+                limits += " F";
+            if (limits_Z == 0)
+                limits += " Z";
+            if (limits.equals(""))
+                limits += "无进校权限";
+
+            list.add(new Student(new User(userid, "",""), student_id, name, college_name,
+                    class_name, phone, email, dormitory, address, id_type, id_number, limits_H, limits_J, limits_F, limits_Z, limits) );
+
+        }
+        return list;
     }
 }

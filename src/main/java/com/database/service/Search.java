@@ -79,8 +79,51 @@ public class Search {
 
     }
 //4) 已出校但尚未返回校园（即离校状态）的学生数量、个人信息及各自的离校时间；
-    public static void DevSearch4(){
+    public static void DevSearch4(User user) throws SQLException {
+        System.out.println("已出校但尚未返回校园（即离校状态）的学生数量、个人信息及各自的离校时间");
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
+        List<Student> studentList;
+        List<Student> studentList2 = new ArrayList<>();
+        List<CheckReport> checkReportList = new ArrayList<>();
+        switch (user.getPermission()){
+            case 0:
+            case 1:
+            case 2:
+                studentList = studentDaoImp.getAllStudent(user.getPermission(), Util.getRangeNameByUser(user));
+                for (int i = 0; i < studentList.size(); i++) {
+                    Student s = studentList.get(i);
+                    CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                    if(checkReport.getState() == 0){
+                        studentList2.add(s);
+                        checkReportList.add(checkReport);
+                    }
+                }
 
+                System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+                for (int i = 0; i < studentList2.size(); i++) {
+                    System.out.println("学生信息");
+                    System.out.println(studentList2.get(i).toString());
+                    System.out.println("离校时间");
+                    System.out.println(checkReportList.get(i).getDate().toString() +
+                            checkReportList.get(i).getTime().toString());
+                }
+                break;
+            default:;
+        }
+        if (user.getPermission() == 2){
+
+            String range2 = Util.getCollegeNameByInstructor(user);
+            studentList = studentDaoImp.getAllStudent(1, range2);
+            int n = 0;
+            for (Student s : studentList) {
+                CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                if (checkReport.getState() == 0) {
+                    n++;
+                }
+            }
+            System.out.println("所在院系内共查询到" +n+"条记录");
+        }
     }
 //5) 未提交出校申请但离校状态超过 24h 的学生数量、个人信息；
     public static void DevSearch5(){
