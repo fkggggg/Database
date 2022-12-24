@@ -94,5 +94,51 @@ public class CheckReportDao_Imp implements CheckReportDao{
         return list;
     }
 
+    public List<CheckReport> getAllCheckReportAfter(String student_id, LocalDate afterDate) throws SQLException {
+        String sql = "SELECT * from check_report WHERE student_id=? ORDER BY date DESC,time DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, student_id);
+        ResultSet result = preparedStatement.executeQuery();
+        List<CheckReport> list = new ArrayList<>();
+        while(result.next()) {
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(result.getString("date"),df1);
+            if (date.isBefore(afterDate)){
+                break;
+            }
+            int check_report_id = result.getInt("check_report_id");
+            DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalTime time = LocalTime.parse(result.getString("time"),df2);
+            int state = result.getInt("state");
+            char campus = result.getString("campus").charAt(0);
+            list.add(new CheckReport(check_report_id,student_id, date, time, state, campus)) ;
+        }
+        return list;
+    }
+
+
+    public List<CheckReport> getAllCheckReportAfter(String student_id, LocalDate afterDate, String campus1) throws SQLException {
+        String sql = "SELECT * from check_report WHERE student_id=? AND campus=? ORDER BY date DESC,time DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, student_id);
+        preparedStatement.setString(2, campus1);
+        ResultSet result = preparedStatement.executeQuery();
+        List<CheckReport> list = new ArrayList<>();
+        while(result.next()) {
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(result.getString("date"),df1);
+            if (date.isBefore(afterDate)){
+                break;
+            }
+            int check_report_id = result.getInt("check_report_id");
+            DateTimeFormatter df2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalTime time = LocalTime.parse(result.getString("time"),df2);
+            int state = result.getInt("state");
+            char campus = result.getString("campus").charAt(0);
+            list.add(new CheckReport(check_report_id,student_id, date, time, state, campus)) ;
+        }
+        return list;
+    }
+
 
 }

@@ -477,7 +477,57 @@ public class Search {
         }
     }
 //9) 过去 n 天每个院系学生产生最多出入校记录的校区。
-    public static void DevSearch9(){
+    public static void DevSearch9(User user) throws SQLException, ParseException {
+
+        System.out.println("过去 n 天每个院系学生产生最多出入校记录的校区");
+
+        if (user.getPermission() != 0){
+            System.out.println("无权限！");
+            return;
+        }
+
+        System.out.println("请输入参数n");
+        int n = input.nextInt();
+        ManagerDao managerDao = new ManagerDao();
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
+        Testtime  testtime = new Testtime();
+        LocalDate date = testtime.gettestdate().minusDays(n);
+
+        List<String> colleges = managerDao.getAllCollegeNames();
+        for (int i = 0; i < colleges.size(); i++) {
+            System.out.println(colleges.get(i));
+            List<Student> studentList = studentDaoImp.getAllStudent(1, colleges.get(i));
+            int count_h = 0, count_j = 0, count_f = 0, count_z = 0;
+            for (int j = 0; j < studentList.size(); j++) {
+                count_h = count_h + checkReportDao_imp.getAllCheckReportAfter(studentList.get(j).getStudent_id(), date, "H").size();
+                count_j = count_j + checkReportDao_imp.getAllCheckReportAfter(studentList.get(j).getStudent_id(), date, "J").size();
+                count_f = count_f + checkReportDao_imp.getAllCheckReportAfter(studentList.get(j).getStudent_id(), date, "F").size();
+                count_z = count_z + checkReportDao_imp.getAllCheckReportAfter(studentList.get(j).getStudent_id(), date, "Z").size();
+            }
+            List<Integer> a = new ArrayList<>();
+            a.add(count_h);
+            a.add(count_j);
+            a.add(count_f);
+            a.add(count_z);
+            String cps;
+            switch (a.indexOf(Collections.max(a))){
+                case 0:
+                    cps = "H校区";
+                    break;
+                case 1:
+                    cps = "J校区";
+                    break;
+                case 2:
+                    cps = "F校区";
+                    break;
+                default:
+                    cps = "Z校区";
+                    break;
+
+            }
+            System.out.println("出入最多的校区是" + cps);
+        }
 
     }
 

@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ManagerDao {
@@ -95,5 +97,18 @@ public class ManagerDao {
         }
         else
             return null;
+    }
+
+    public List<String> getAllCollegeNames() throws SQLException {
+
+        String sql = "SELECT * FROM database.college_administrator";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet result = preparedStatement.executeQuery();
+
+        List<String> list = new ArrayList<>();
+        while (result.next()){
+            list.add( result.getString("college_name"));
+        }
+        return  list;
     }
 }
