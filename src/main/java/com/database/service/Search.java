@@ -532,7 +532,36 @@ public class Search {
     }
 
     //调用者需保证opt在1~9之间
-    public static void DevelopSearch(User user, int opt){
+    public static void DevelopSearch(User user, int opt) throws Exception{
+        switch (opt) {
+            case 1:
+                DevSearch1(user);
+                break;
+            case 2:
+                DevSearch2(user);
+                break;
+            case 3:
+                DevSearch3(user);
+                break;
+            case 4:
+                DevSearch4(user);
+                break;
+            case 5:
+                DevSearch5(user);
+                break;
+            case 6:
+                DevSearch6(user);
+                break;
+            case 7:
+                DevSearch7(user);
+                break;
+            case 8:
+                DevSearch8(user);
+                break;
+            case 9:
+                DevSearch9(user);
+                break;
+        }
 
     }
 
