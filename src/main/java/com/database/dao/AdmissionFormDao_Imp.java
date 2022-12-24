@@ -1,15 +1,19 @@
 package com.database.dao;
 
 import com.database.bean.AdmissionForm;
+import com.database.bean.User;
 import com.database.jdbc.JDBCUtils;
+import com.database.service.Util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdmissionFormDao_Imp implements AdmissionFormDao{
@@ -80,6 +84,94 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
             int deform_id = result.getInt("adform_id");
             DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate application_date = LocalDate.parse(result.getString("application_date"),df1);
+            String name = result.getString("name");
+            String college_name = result.getString("college_name");
+            String class_name = result.getString("class_name");
+            String reason = result.getString("reason");
+            LocalDate estinated_date = LocalDate.parse(result.getString("estimated_date"),df1);
+            int state = result.getInt("state");
+            String reject_reason = result.getString("reject_reason");
+            admissionFormList.add( new AdmissionForm(deform_id, application_date, student_id, name, college_name, class_name,
+                    reason, estinated_date, state, reject_reason));
+        }
+        return admissionFormList;
+    }
+
+    @Override
+    public List<AdmissionForm> getAllAdmissionFormAfter(User user, LocalDate date) throws SQLException {
+        String sql;
+        switch (user.getPermission()){
+            case 0:
+                sql = "SELECT * from admission_form ORDER BY application_date DESC";
+                break;
+            case 1:
+                String range = Util.getRangeNameByUser(user);
+                sql = "SELECT * from admission_form WHERE college_name=" + range + " ORDER BY application_date DESC";
+                break;
+            case 2:
+                String classRange = Util.getRangeNameByUser(user);
+                sql = "SELECT * from admission_form WHERE class_name=" + classRange+ " ORDER BY application_date DESC";
+                break;
+            default:return null;
+        }
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet result = preparedStatement.executeQuery();
+        List<AdmissionForm> admissionFormList = new ArrayList<>();
+
+        // localdate 转 date
+        Date date1 = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        while(result.next())
+        {
+            if (result.getDate("application_date").before(date1) )
+                break;
+            int deform_id = result.getInt("adform_id");
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate application_date = LocalDate.parse(result.getString("application_date"),df1);
+            String student_id = result.getString("student_id");
+            String name = result.getString("name");
+            String college_name = result.getString("college_name");
+            String class_name = result.getString("class_name");
+            String reason = result.getString("reason");
+            LocalDate estinated_date = LocalDate.parse(result.getString("estimated_date"),df1);
+            int state = result.getInt("state");
+            String reject_reason = result.getString("reject_reason");
+            admissionFormList.add( new AdmissionForm(deform_id, application_date, student_id, name, college_name, class_name,
+                    reason, estinated_date, state, reject_reason));
+        }
+        return admissionFormList;
+    }
+
+    @Override
+    public List<AdmissionForm> getAllAdmissionFormAfter(int perm, String range, LocalDate date) throws SQLException {
+        String sql;
+        switch (perm){
+            case 0:
+                sql = "SELECT * from admission_form ORDER BY application_date DESC";
+                break;
+            case 1:
+                sql = "SELECT * from admission_form WHERE college_name=" + range + " ORDER BY application_date DESC";
+                break;
+            case 2:
+                sql = "SELECT * from admission_form WHERE class_name=" + range+ " ORDER BY application_date DESC";
+                break;
+            default:return null;
+        }
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet result = preparedStatement.executeQuery();
+        List<AdmissionForm> admissionFormList = new ArrayList<>();
+
+        // localdate 转 date
+        Date date1 = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        while(result.next())
+        {
+            if (result.getDate("application_date").before(date1) )
+                break;
+            int deform_id = result.getInt("adform_id");
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate application_date = LocalDate.parse(result.getString("application_date"),df1);
+            String student_id = result.getString("student_id");
             String name = result.getString("name");
             String college_name = result.getString("college_name");
             String class_name = result.getString("class_name");

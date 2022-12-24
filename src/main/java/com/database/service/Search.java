@@ -4,6 +4,7 @@ import com.database.bean.*;
 import com.database.dao.*;
 import com.database.dao.StudentDao.*;
 import com.database.testtime.Testtime;
+import jdk.incubator.vector.VectorOperators;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -23,7 +24,50 @@ public class Search {
     /*************** 进阶查询 ****************/
 //进阶需求:
 //1) 过去 n 天尚未批准的入校申请和出校申请数量及详细信息；
-    public static void DevSearch1(){
+    public static void DevSearch1(User user) throws ParseException, SQLException {
+        System.out.println("过去 n 天尚未批准的入校申请和出校申请数量及详细信息");
+
+        System.out.println("请输入参数n");
+        int n = input.nextInt();
+
+        AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
+        Testtime testtime = new Testtime();
+        LocalDate localDate = testtime.gettestdate().minusDays(n);
+        List<AdmissionForm> list = new ArrayList<>();
+        List<AdmissionForm> rst = new ArrayList<>();
+        switch (user.getPermission()){
+            case 0:
+            case 1:
+                list = admissionFormDao_imp.getAllAdmissionFormAfter(user, localDate);
+                rst = list.stream().map(a->{
+                    if (a.getState() == 0 || a.getState() == 1)
+                        return a;
+                    else return null;
+                }).collect(Collectors.toList());
+                System.out.println("所管理范围内共查询到" + rst.size() + "条记录");
+                for (int i = 0; i < rst.size(); i++) {
+                    System.out.println(rst.get(i).toString());
+                }
+
+                break;
+            case 2:
+                list = admissionFormDao_imp.getAllAdmissionFormAfter(user, localDate);
+                rst = list.stream().map(a->{
+                    if (a.getState() == 0)
+                        return a;
+                    else return null;
+                }).collect(Collectors.toList());
+                System.out.println("所管理范围内共查询到" + rst.size() + "条记录");
+                for (int i = 0; i < rst.size(); i++) {
+                    System.out.println(rst.get(i).toString());
+                }
+
+                String range2 = Util.getCollegeNameByInstructor(user);
+                int s = admissionFormDao_imp.getAllAdmissionFormAfter(1, range2, localDate).size();
+                System.out.println("所在院系内共查询到" +s+"条记录");
+                break;
+            default:;
+        }
 
     }
 //2) 前 n 个提交入校申请最多的学生，支持按多级范围（全校、院系、班级）进行筛选；
