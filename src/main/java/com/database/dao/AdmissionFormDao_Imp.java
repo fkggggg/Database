@@ -185,4 +185,18 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
         return admissionFormList;
     }
 
+    @Override
+    public int getAdmissionFormNumber(String student_id) throws SQLException {
+        String sql = "SELECT count(*) from admission_form WHERE student_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,student_id);
+        ResultSet result = preparedStatement.executeQuery();
+        if(result.next())
+        {
+            return result.getInt(0);
+        }
+        else return  -1;
+
+    }
+
 }

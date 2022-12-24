@@ -24,4 +24,8 @@ public class AuthCheck {
     public static Auth checkStu(User user, String stu_id){
         return Auth.NO_AUTH;
     }
+
+    public static Auth checkRange(User user, int perm, String range){
+        return Auth.NO_AUTH;
+    }
 }

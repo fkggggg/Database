@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -71,11 +72,107 @@ public class Search {
 
     }
 //2) 前 n 个提交入校申请最多的学生，支持按多级范围（全校、院系、班级）进行筛选；
-    public static void DevSearch2(){
+    public static void DevSearch2(User user) throws SQLException {
+        System.out.println("前 n 个提交入校申请最多的学生，支持按多级范围（全校、院系、班级）进行筛选");
+
+        System.out.println("请输入参数n");
+        int n = input.nextInt();
+        ManagerDao managerDao = new ManagerDao();
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
+        System.out.println("请输入范围（0全校、1院系、2班级）");
+        int m = input.nextInt();
+        String range = null;
+        switch (m){
+            case 0:
+
+            case 1:
+                System.out.println("请输入院系名");
+                range = input.next();
+                if (managerDao.getCollegeAdministratorByName(range) == null){
+                    System.out.println("无此名称！");
+                }
+                break;
+
+            case 2:
+                System.out.println("请输入班级名");
+                range = input.next();
+                if (managerDao.getClassInstructorByName(range) == null){
+                    System.out.println("无此名称！");
+                }
+                break;
+
+            default: return;
+        }
+        if (AuthCheck.checkRange(user, m, range) != AuthCheck.Auth.AUTH_DETAIL){
+            System.out.println("无权限！");
+            return;
+        }
+        List<Student> studentList = studentDaoImp.getAllStudent(m, range);
+        List<Integer> numList = new ArrayList<>();
+        for (int i = 0; i < studentList.size(); i++) {
+            Student s = studentList.get(i);
+            numList.add(admissionFormDao_imp.getAdmissionFormNumber(s.getStudent_id()));
+        }
+        for (int i = 0; i < n; i++) {
+            int maxi = numList.indexOf(Collections.max(numList));
+            System.out.println(studentList.get(maxi).toString());
+            numList.remove(maxi);
+            studentList.remove(maxi);
+
+        }
 
     }
 //3) 前 n 个平均离校时间最长的学生，支持按多级范围（全校、院系、班级）进行筛选；
-    public static void DevSearch3(){
+    public static void DevSearch3(User user) throws SQLException {
+        System.out.println("前 n 个平均离校时间最长的学生，支持按多级范围（全校、院系、班级）进行筛选");
+
+        System.out.println("请输入参数n");
+        int n = input.nextInt();
+        ManagerDao managerDao = new ManagerDao();
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
+        System.out.println("请输入范围（0全校、1院系、2班级）");
+        int m = input.nextInt();
+        String range = null;
+        switch (m){
+            case 0:
+
+            case 1:
+                System.out.println("请输入院系名");
+                range = input.next();
+                if (managerDao.getCollegeAdministratorByName(range) == null){
+                    System.out.println("无此名称！");
+                }
+                break;
+
+            case 2:
+                System.out.println("请输入班级名");
+                range = input.next();
+                if (managerDao.getClassInstructorByName(range) == null){
+                    System.out.println("无此名称！");
+                }
+                break;
+
+            default: return;
+        }
+        if (AuthCheck.checkRange(user, m, range) != AuthCheck.Auth.AUTH_DETAIL){
+            System.out.println("无权限！");
+            return;
+        }
+        List<Student> studentList = studentDaoImp.getAllStudent(m, range);
+        List<Integer> numList = new ArrayList<>();
+        for (int i = 0; i < studentList.size(); i++) {
+            Student s = studentList.get(i);
+            numList.add(admissionFormDao_imp.getAdmissionFormNumber(s.getStudent_id()));
+        }
+        for (int i = 0; i < n; i++) {
+            int maxi = numList.indexOf(Collections.max(numList));
+            System.out.println(studentList.get(maxi).toString());
+            numList.remove(maxi);
+            studentList.remove(maxi);
+
+        }
 
     }
 //4) 已出校但尚未返回校园（即离校状态）的学生数量、个人信息及各自的离校时间；

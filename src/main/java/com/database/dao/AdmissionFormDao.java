@@ -18,4 +18,7 @@ public interface AdmissionFormDao {
 
     List<AdmissionForm> getAllAdmissionFormAfter(int perm, String range, LocalDate date) throws SQLException;
 
+    /*
+    * -1 for not found*/
+    int getAdmissionFormNumber(String student_id)throws SQLException;
 }
