@@ -240,8 +240,68 @@ public class Search {
 
     }
 //8) 连续 n 天填写“健康日报”时间（精确到分钟）完全一致的学生数量，个人信息；
-    public static void DevSearch8(){
+    public static void DevSearch8(User user) throws Exception {
+        System.out.println("连续 n 天填写“健康日报”时间（精确到分钟）完全一致的学生数量，个人信息");
+        System.out.println("请输入参数n");
+        int n = input.nextInt();
 
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        DailyReportDao_Imp dailyReportDao_imp = new DailyReportDao_Imp();
+
+        List<Student> studentList = studentDaoImp.getAllStudent(user.getPermission(), Util.getRangeNameByUser(user));
+        List<Student> studentList2 = new ArrayList<>();
+
+        Testtime testtime = new Testtime();
+        LocalDateTime localDateTime = LocalDateTime.of(testtime.gettestdate(), testtime.gettesttime());
+        LocalTime last = LocalTime.now();
+        for (int i = 0; i < studentList.size(); i++) {
+            Student s = studentList.get(i);
+            int j = 0;
+            for (; j < n; j++) {
+                DailyReport dailyReport = dailyReportDao_imp.getDailyReport(s.getStudent_id(), localDateTime.toLocalDate().minusDays(j));
+                if (j!=0){
+                    if (dailyReport.getTime().getHour() == last.getHour() &&
+                            dailyReport.getTime().getMinute() == last.getMinute())
+                        ;
+                    else break;
+                }
+                last = dailyReport.getTime();
+            }
+            if (j == n){
+                studentList2.add(s);
+            }
+        }
+
+        System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+        for (int i = 0; i < studentList2.size(); i++) {
+            System.out.println("学生信息");
+            System.out.println(studentList2.get(i).toString());
+        }
+
+        if (user.getPermission() == 2){
+            int m=0;
+            String range2 = Util.getCollegeNameByInstructor(user);
+            studentList = studentDaoImp.getAllStudent(1, range2);
+            for (int i = 0; i < studentList.size(); i++) {
+                Student s = studentList.get(i);
+                int j = 0;
+                for (; j < n; j++) {
+                    DailyReport dailyReport = dailyReportDao_imp.getDailyReport(s.getStudent_id(), localDateTime.toLocalDate().minusDays(j));
+                    if (j!=0){
+                        if (dailyReport.getTime().getHour() == last.getHour() &&
+                                dailyReport.getTime().getMinute() == last.getMinute())
+                            ;
+                        else break;
+                    }
+                    last = dailyReport.getTime();
+                }
+                if (j == n){
+                    studentList2.add(s);
+                }
+            }
+
+            System.out.println("所在院系内共查询到" +studentList2.size()+"条记录");
+        }
     }
 //9) 过去 n 天每个院系学生产生最多出入校记录的校区。
     public static void DevSearch9(){
