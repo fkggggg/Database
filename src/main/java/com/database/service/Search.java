@@ -126,8 +126,61 @@ public class Search {
         }
     }
 //5) 未提交出校申请但离校状态超过 24h 的学生数量、个人信息；
-    public static void DevSearch5(){
+    public static void DevSearch5(User user) throws Exception {
+        System.out.println("未提交出校申请但离校状态超过 24h 的学生数量、个人信息");
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
+        DepartureFormDao_Imp departureFormDao_imp = new DepartureFormDao_Imp();
+        List<Student> studentList;
+        List<Student> studentList2 = new ArrayList<>();
+        List<CheckReport> checkReportList = new ArrayList<>();
+        switch (user.getPermission()){
+            case 0:
+            case 1:
+            case 2:
+                studentList = studentDaoImp.getAllStudent(user.getPermission(), Util.getRangeNameByUser(user));
+                Testtime testtime = new Testtime();
+                LocalDateTime dateTime = LocalDateTime.of(testtime.gettestdate().minusDays(1), testtime.gettesttime());
+                for (int i = 0; i < studentList.size(); i++) {
+                    Student s = studentList.get(i);
+                    CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                    LocalDateTime last_out = LocalDateTime.of(checkReport.getDate(), checkReport.getTime());
+                    if(checkReport.getState() == 0 && last_out.isBefore(dateTime)){
+                        DepartureForm departureForm = departureFormDao_imp.getmyDepartureForm(s.getStudent_id());
+                        if (departureForm.getReturn_date().isBefore(dateTime.toLocalDate())){
+                            studentList2.add(s);
+                        }
+                    }
+                }
 
+                System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+                for (int i = 0; i < studentList2.size(); i++) {
+                    System.out.println("学生信息");
+                    System.out.println(studentList2.get(i).toString());
+                }
+                break;
+            default:;
+        }
+        if (user.getPermission() == 2){
+            int m=0;
+            String range2 = Util.getCollegeNameByInstructor(user);
+            studentList = studentDaoImp.getAllStudent(1, range2);
+            Testtime testtime = new Testtime();
+            LocalDateTime dateTime = LocalDateTime.of(testtime.gettestdate().minusDays(1), testtime.gettesttime());
+            for (int i = 0; i < studentList.size(); i++) {
+                Student s = studentList.get(i);
+                CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                LocalDateTime last_out = LocalDateTime.of(checkReport.getDate(), checkReport.getTime());
+                if(checkReport.getState() == 0 && last_out.isBefore(dateTime)){
+                    DepartureForm departureForm = departureFormDao_imp.getmyDepartureForm(s.getStudent_id());
+                    if (departureForm.getReturn_date().isBefore(dateTime.toLocalDate())){
+                        m++;
+                    }
+                }
+            }
+
+            System.out.println("所在院系内共查询到" +m+"条记录");
+        }
     }
 //6) 已提交出校申请但未离校的学生数量、个人信息；
     public static void DevSearch6(){
