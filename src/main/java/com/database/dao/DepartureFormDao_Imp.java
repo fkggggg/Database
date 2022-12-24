@@ -12,8 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DepartureFormDao_Imp implements DepartureFormDao {
@@ -101,5 +103,49 @@ public class DepartureFormDao_Imp implements DepartureFormDao {
         }
         return departureFormList;
     }
+    public List<DepartureForm> getAllDepartureFormAfter(int perm, String range, LocalDate date) throws SQLException {
+        String sql;
+        switch (perm){
+            case 0:
+                sql = "SELECT * from database.departure_report_form ORDER BY application_date DESC";
+                break;
+            case 1:
+                sql = "SELECT * from database.departure_report_form WHERE college_name=" + range + " ORDER BY application_date DESC";
+                break;
+            case 2:
+                sql = "SELECT * from database.departure_report_form WHERE class_name=" + range+ " ORDER BY application_date DESC";
+                break;
+            default:return null;
+        }
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet result = preparedStatement.executeQuery();
+        List<DepartureForm> departureFormList = new ArrayList<>();
+
+        // localdate 转 date
+        Date date1 = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        while(result.next())
+        {
+            if (result.getDate("application_date").before(date1) )
+                break;
+            String student_id = result.getString("student_id");
+            int deform_id = result.getInt("deform_id");
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate application_date = LocalDate.parse(result.getString("application_date"),df1);
+            String name = result.getString("name");
+            String college_name = result.getString("college_name");
+            String class_name = result.getString("class_name");
+            String reason = result.getString("reason");
+            String destination = result.getString("destination");
+            LocalDate estinated_date = LocalDate.parse(result.getString("estimated_date"),df1);
+            LocalDate return_date = LocalDate.parse(result.getString("return_date"),df1);
+            int state = result.getInt("state");
+            String reject_reason = result.getString("reject_reason");
+            departureFormList.add( new DepartureForm(deform_id, application_date, student_id, name, college_name, class_name,
+                    reason, destination, estinated_date, return_date, state, reject_reason));
+        }
+        return departureFormList;
+    }
+
 
 }

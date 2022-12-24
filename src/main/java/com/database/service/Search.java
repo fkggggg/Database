@@ -32,13 +32,17 @@ public class Search {
         int n = input.nextInt();
 
         AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
+        DepartureFormDao_Imp departureFormDao_imp = new DepartureFormDao_Imp();
         Testtime testtime = new Testtime();
         LocalDate localDate = testtime.gettestdate().minusDays(n);
         List<AdmissionForm> list = new ArrayList<>();
+        List<DepartureForm> list2= new ArrayList<>();
         List<AdmissionForm> rst = new ArrayList<>();
+        List<DepartureForm> rst2 = new ArrayList<>();
         switch (user.getPermission()){
             case 0:
             case 1:
+                System.out.println("进校申请");
                 list = admissionFormDao_imp.getAllAdmissionFormAfter(user, localDate);
                 rst = list.stream().map(a->{
                     if (a.getState() == 0 || a.getState() == 1)
@@ -50,6 +54,17 @@ public class Search {
                     System.out.println(rst.get(i).toString());
                 }
 
+                System.out.println("离校申请");
+                list2 = departureFormDao_imp.getAllDepartureFormAfter(user.getPermission(), Util.getRangeNameByUser(user), localDate);
+                rst2 = list2.stream().map(a->{
+                    if (a.getState() == 0 || a.getState() == 1)
+                        return a;
+                    else return null;
+                }).collect(Collectors.toList());
+                System.out.println("所管理范围内共查询到" + rst2.size() + "条记录");
+                for (int i = 0; i < rst2.size(); i++) {
+                    System.out.println(rst2.get(i).toString());
+                }
                 break;
             case 2:
                 list = admissionFormDao_imp.getAllAdmissionFormAfter(user, localDate);
@@ -58,13 +73,28 @@ public class Search {
                         return a;
                     else return null;
                 }).collect(Collectors.toList());
+                System.out.println("进校申请");
                 System.out.println("所管理范围内共查询到" + rst.size() + "条记录");
                 for (int i = 0; i < rst.size(); i++) {
                     System.out.println(rst.get(i).toString());
                 }
-
                 String range2 = Util.getCollegeNameByInstructor(user);
                 int s = admissionFormDao_imp.getAllAdmissionFormAfter(1, range2, localDate).size();
+                System.out.println("所在院系内共查询到" +s+"条记录");
+
+                System.out.println("离校申请");
+                list2 = departureFormDao_imp.getAllDepartureFormAfter(user.getPermission(), Util.getRangeNameByUser(user), localDate);
+                rst2 = list2.stream().map(a->{
+                    if (a.getState() == 0 || a.getState() == 1)
+                        return a;
+                    else return null;
+                }).collect(Collectors.toList());
+                System.out.println("所管理范围内共查询到" + rst2.size() + "条记录");
+                for (int i = 0; i < rst2.size(); i++) {
+                    System.out.println(rst2.get(i).toString());
+                }
+
+                s = admissionFormDao_imp.getAllAdmissionFormAfter(1, range2, localDate).size();
                 System.out.println("所在院系内共查询到" +s+"条记录");
                 break;
             default:;
@@ -800,16 +830,6 @@ public class Search {
             }
 
 //        }
-    }
-
-
-    /*************** 申请表 ****************/
-    public static void searchDeparture(){
-
-    }
-
-    public static void searchAdmission(){
-
     }
 
 }
