@@ -49,6 +49,41 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
         return result > 0;
     }
 
+    public boolean updateAdmissionFormState(int adform_id, int newState, String reason) throws SQLException {
+        String sql = "UPDATE database.admission_report_form SET `state`=?, reason=? WHERE adform_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, newState);
+        preparedStatement.setString(2,reason);
+        preparedStatement.setInt(3,adform_id);
+        int result = preparedStatement.executeUpdate();
+        return result > 0;
+    }
+
+    public AdmissionForm getAdmissionFormById(int adform_id) throws SQLException{
+        String sql = "SELECT * from admission_form where adform_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1,adform_id);
+        ResultSet result = preparedStatement.executeQuery();
+
+        if(result.next())
+        {
+            String student_id = result.getString("student_id");
+            int deform_id = result.getInt("adform_id");
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate application_date = LocalDate.parse(result.getString("application_date"),df1);
+            String name = result.getString("name");
+            String college_name = result.getString("college_name");
+            String class_name = result.getString("class_name");
+            String reason = result.getString("reason");
+            LocalDate estinated_date = LocalDate.parse(result.getString("estimated_date"),df1);
+            int state = result.getInt("state");
+            String reject_reason = result.getString("reject_reason");
+            return new AdmissionForm(deform_id, application_date, student_id, name, college_name, class_name,
+                    reason, estinated_date, state, reject_reason);
+        }
+        return new AdmissionForm(-1);
+    }
+
     @Override
     public AdmissionForm getmyAdmissionForm(String student_id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MY_ADMISSION_FORM);
