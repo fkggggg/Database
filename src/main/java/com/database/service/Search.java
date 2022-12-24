@@ -355,8 +355,62 @@ public class Search {
         }
     }
 //7) 过去 n 天一直在校未曾出校的学生，支持按多级范围（全校、院系、班级）进行筛选；
-    public static void DevSearch7(){
+    public static void DevSearch7(User user) throws SQLException, ParseException {
+        System.out.println("过去 n 天一直在校未曾出校的学生，支持按多级范围（全校、院系、班级）进行筛选");
 
+        System.out.println("请输入参数n");
+        int n = input.nextInt();
+        ManagerDao managerDao = new ManagerDao();
+        StudentDao_Imp studentDaoImp = new StudentDao_Imp();
+        CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
+        System.out.println("请输入范围（0全校、1院系、2班级）");
+        int m = input.nextInt();
+        String range = null;
+        switch (m){
+            case 0:
+
+            case 1:
+                System.out.println("请输入院系名");
+                range = input.next();
+                if (managerDao.getCollegeAdministratorByName(range) == null){
+                    System.out.println("无此名称！");
+                }
+                break;
+
+            case 2:
+                System.out.println("请输入班级名");
+                range = input.next();
+                if (managerDao.getClassInstructorByName(range) == null){
+                    System.out.println("无此名称！");
+                }
+                break;
+
+            default: return;
+        }
+        if (AuthCheck.checkRange(user, m, range) != AuthCheck.Auth.AUTH_DETAIL){
+            System.out.println("无权限！");
+            return;
+        }
+        List<Student> studentList = studentDaoImp.getAllStudent(m, range);
+        List<Student> studentList2 = new ArrayList<>();
+        Testtime testtime = new Testtime();
+        LocalDateTime localDateTime = LocalDateTime.of(testtime.gettestdate().minusDays(n), testtime.gettesttime());
+        for (int i = 0; i < studentList.size(); i++) {
+            Student s = studentList.get(i);
+
+            CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+
+            if (checkReport.getState() == 1){
+                LocalDateTime last_in = LocalDateTime.of(checkReport.getDate(), checkReport.getTime());
+                if (last_in.isBefore(localDateTime))
+                    studentList2.add(s);
+            }
+        }
+
+        System.out.println("范围内共查询到" + studentList2.size() + "条记录");
+        for (int i = 0; i < studentList2.size(); i++) {
+            System.out.println(studentList2.get(i).toString());
+        }
     }
 //8) 连续 n 天填写“健康日报”时间（精确到分钟）完全一致的学生数量，个人信息；
     public static void DevSearch8(User user) throws Exception {
