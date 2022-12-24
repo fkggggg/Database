@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -131,15 +132,23 @@ public class Search {
                         System.out.println(departureForms.get(i).toString());
                     }
                 }else{
-                    if (str.contains("1")){
+                    List<Integer> integersAllowed = new ArrayList<>();
+                    if (str.contains("1")){// 待审核
+                        if(user.getPermission() == 0 || user.getPermission() == 1){
+                            integersAllowed.add(0);
+                            integersAllowed.add(1);
+                        }
+                        else{ // 2
+                            integersAllowed.add(0);
+                        }
                         List<AdmissionForm>  alst = admissionForms.stream().map(a->{
-                            if (a.getState() == 1)
+                            if (integersAllowed.contains(a.getState()))
                                 return a;
                             else
                                 return null;
                         }).collect(Collectors.toList());
                         List<DepartureForm> dlst = departureForms.stream().map(d->{
-                            if (d.getState() == 1)
+                            if (integersAllowed.contains(d.getState()))
                                 return d;
                             else return null;
                         }).collect(Collectors.toList());
@@ -152,16 +161,22 @@ public class Search {
                             System.out.println(dlst.get(i).toString());
                         }
                     }
-                    if (str.contains("2")){
-
+                    if (str.contains("2")){// 已同意
+                        if(user.getPermission() == 0 || user.getPermission() == 1){
+                            integersAllowed.add(2);
+                        }
+                        else{ // 2
+                            integersAllowed.add(2);
+                            integersAllowed.add(1);
+                        }
                         List<AdmissionForm>  alst = admissionForms.stream().map(a->{
-                            if (a.getState() == 2)
+                            if (integersAllowed.contains(a.getState()))
                                 return a;
                             else
                                 return null;
                         }).collect(Collectors.toList());
                         List<DepartureForm> dlst = departureForms.stream().map(d->{
-                            if (d.getState() == 2)
+                            if (integersAllowed.contains(d.getState()))
                                 return d;
                             else return null;
                         }).collect(Collectors.toList());
@@ -174,16 +189,16 @@ public class Search {
                             System.out.println(dlst.get(i).toString());
                         }
                     }
-                    if (str.contains("3")){
+                    if (str.contains("3")){// 已拒绝
 
                         List<AdmissionForm>  alst = admissionForms.stream().map(a->{
-                            if (a.getState() == 3)
+                            if (a.getState() == -1 || a.getState() == -2)
                                 return a;
                             else
                                 return null;
                         }).collect(Collectors.toList());
                         List<DepartureForm> dlst = departureForms.stream().map(d->{
-                            if (d.getState() == 3)
+                            if (d.getState() == -1 || d.getState() == -2)
                                 return d;
                             else return null;
                         }).collect(Collectors.toList());
