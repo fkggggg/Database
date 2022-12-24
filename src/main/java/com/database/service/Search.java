@@ -131,7 +131,7 @@ public class Search {
         int n = input.nextInt();
         ManagerDao managerDao = new ManagerDao();
         StudentDao_Imp studentDaoImp = new StudentDao_Imp();
-        AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
+        CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
         System.out.println("请输入范围（0全校、1院系、2班级）");
         int m = input.nextInt();
         String range = null;
@@ -164,7 +164,29 @@ public class Search {
         List<Integer> numList = new ArrayList<>();
         for (int i = 0; i < studentList.size(); i++) {
             Student s = studentList.get(i);
-            numList.add(admissionFormDao_imp.getAdmissionFormNumber(s.getStudent_id()));
+
+            List<CheckReport> list = checkReportDao_imp.getAllCheckReport(s.getStudent_id());
+
+            LocalDateTime latest_in = null;
+            LocalDateTime out = null;
+            int time_checking = 0;
+            int count = 0;
+
+            for (int j = 0; j < list.size(); j++) {
+                CheckReport report = list.get(j);
+
+                if (report.getState() == 1 && time_checking == 0){// 入校
+                    latest_in = LocalDateTime.of(report.getDate(),  report.getTime());
+
+                    time_checking = 1;
+                }
+                else if(report.getState() == 0 && time_checking == 1){
+                    out = LocalDateTime.of(report.getDate(),  report.getTime());
+                    count-= out.compareTo(latest_in);
+                    time_checking = 0;
+                }
+            }
+            numList.add(count);
         }
         for (int i = 0; i < n; i++) {
             int maxi = numList.indexOf(Collections.max(numList));
