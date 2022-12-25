@@ -239,7 +239,7 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
         ResultSet result = preparedStatement.executeQuery();
         if(result.next())
         {
-            return result.getInt(0);
+            return result.getInt(1);
         }
         else return  -1;
 
