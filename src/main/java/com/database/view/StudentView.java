@@ -378,7 +378,7 @@ public class StudentView {
                     }
                     while(check == 1)
                     {
-                        System.out.println("***********************\t\t请输入预计返校日期(格式:年-月-日，示例：2022-12-25)：\t************************");
+                        System.out.println("***********************\t\t请输入预计返校日期(格式:年-月-日，示例：2022-12-25)：");
                         return_date = LocalDate.parse(input.nextLine(),df1);
                         if(return_date.isBefore(estimated_date))
                             System.out.println("返校日期不能早于离校日期！");

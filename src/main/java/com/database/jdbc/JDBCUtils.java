@@ -21,14 +21,12 @@ public class JDBCUtils {
             username = p.getProperty("username");
             password = p.getProperty("password");
             Class.forName(driver);
-            System.out.println("驱动加载成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static Connection getConnection() throws SQLException {
-        System.out.println("数据库连接成功");
         return DriverManager.getConnection(url,username,password);
     }
 
