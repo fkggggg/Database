@@ -27,11 +27,11 @@ public class Handle {
             state_to_handle = 1;
         else
             state_to_handle = 0;
-        rst = list.stream().map(a->{
-            if (a.getState() == state_to_handle)
-                return a;
-            else return null;
-        }).collect(Collectors.toList());
+
+        for (int i = 0; i <list.size(); i++) {
+            if (list.get(i).getState()== state_to_handle)
+                rst.add(list.get(i));
+        }
         System.out.println("一共" + rst.size() + "条记录待处理");
         for (int i = 0; i < rst.size(); i++) {
             System.out.println(rst.get(i).toString());
@@ -78,11 +78,10 @@ public class Handle {
             state_to_handle = 1;
         else
             state_to_handle = 0;
-        rst = list.stream().map(a->{
-            if (a.getState() == state_to_handle)
-                return a;
-            else return null;
-        }).collect(Collectors.toList());
+        for (int i = 0; i <list.size(); i++) {
+            if (list.get(i).getState()== state_to_handle)
+                rst.add(list.get(i));
+        }
         System.out.println("一共" + rst.size() + "条记录待处理");
         for (int i = 0; i < rst.size(); i++) {
             System.out.println(rst.get(i).toString());
