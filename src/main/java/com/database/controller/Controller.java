@@ -150,7 +150,7 @@ public class Controller {
             }
         }
     }
-    private static void StudentServer(User user) throws SQLException, ParseException {
+    private static void StudentServer(User user) throws Exception {
         UserDao_Imp userDao_imp = new UserDao_Imp();
         StudentDao_Imp studentDao_imp = new StudentDao_Imp();
         DailyReportDao_Imp dailyReportDao_imp = new DailyReportDao_Imp();
@@ -308,6 +308,12 @@ public class Controller {
                             if(delete){
                                 System.out.println("撤销成功！");
                                 departureForm = departureFormDao_imp.getmyDepartureForm(student.getStudent_id());
+                                if(departureForm.getDeform_id() == -1) {
+                                    departureForm.setStudent_id(student.getStudent_id());
+                                    departureForm.setName(student.getName());
+                                    departureForm.setCollege_name(student.getCollege_name());
+                                    departureForm.setClass_name(student.getClass_name());
+                                }
                             }else{
                                 System.out.println("撤销失败！");
                             }
@@ -324,7 +330,10 @@ public class Controller {
                         }
                     }
                 }
-
+                case 6 ->{
+                    int dev_opt = DevelopSearchView();
+                    DevelopSearch(user, dev_opt);
+                }
             }
         }
     }

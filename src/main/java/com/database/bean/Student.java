@@ -192,18 +192,21 @@ public class Student extends User implements Cloneable{
 
     @Override
     public String toString() {
-        return "Student{" +
-                "student_id='" + student_id + '\'' +
-                ", name='" + name + '\'' +
-                ", college_name='" + college_name + '\'' +
-                ", class_name='" + class_name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", dormitory='" + dormitory + '\'' +
-                ", address='" + address + '\'' +
-                ", id_type='" + id_type + '\'' +
-                ", id_number='" + id_number + '\'' +
-                ", limits='" + limits + '\'' +
-                '}';
+        return "学号：" + student_id +
+                "\t姓名：" + name +
+                "\t院系：" + college_name +
+                "\t班级：" + class_name +
+                "\t手机号：" + phone +
+                "\t电子邮箱：" + email +
+                "\t宿舍：" + dormitory +
+                "\t住址：" + address +
+                "\t证件类型：" + id_type +
+                "\t证件号：" + id_number +
+                "\t权限：" + limits;
+    }
+
+    public String Student_idandNametoString() {
+        return "学号：" + student_id +
+                "\t姓名：" + name;
     }
 }

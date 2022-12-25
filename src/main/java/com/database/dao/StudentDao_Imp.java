@@ -104,14 +104,16 @@ public class StudentDao_Imp implements StudentDao{
                 sql = "SELECT * from student";
                 break;
             case 1:
-                sql = "SELECT * from student where college_name =" + range;
+                sql = "SELECT * from student where college_name=?";
                 break;
             case 2:
-                sql = "SELECT * from student where class_name =" + range;
+                sql = "SELECT * from student where class_name=?";
                 break;
             default: return null;
         }
         PreparedStatement preparedStatement0 = connection.prepareStatement(sql);
+        if(perm!=0)
+            preparedStatement0.setString(1, range);
         ResultSet result = preparedStatement0.executeQuery();
         List<Student> list = new ArrayList<>();
         while (result.next()){

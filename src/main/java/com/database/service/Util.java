@@ -1,14 +1,14 @@
 package com.database.service;
 
+import com.database.bean.Student;
 import com.database.bean.User;
 import com.database.dao.ManagerDao;
+import com.database.dao.StudentDao_Imp;
 
 import java.sql.SQLException;
 import java.util.Map;
 
 public class Util {
-    /*
-    * only apply to userperm == 1 or 2(means college or class administrator) */
     public static String getRangeNameByUser(User user) throws SQLException {
         ManagerDao managerDao = new ManagerDao();
         switch (user.getPermission()){
@@ -20,6 +20,10 @@ public class Util {
             case 2:
                 Map<String, Object> class_ = managerDao.getClassInstructorByUserId(user.getUser_id());
                 return (String) class_.get("class_name");
+            case 3:
+                StudentDao_Imp studentDaoImp=new StudentDao_Imp();
+                Student student = studentDaoImp.getStudent(user);
+                return student.getClass_name();
 
             default: return null;
 

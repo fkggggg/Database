@@ -100,7 +100,7 @@ public class View {
         System.out.println("***********************\t\t3：进/出校打卡 \t\t************************");
         System.out.println("***********************\t\t4：我的入校申请 \t\t************************");
         System.out.println("***********************\t\t5：我的出校申请 \t\t************************");
-        System.out.println("***********************\t\t6：查看本班数据 \t\t************************");
+        System.out.println("***********************\t\t6：进阶查询    \t\t************************");
         String CHOOSE = input.nextLine();
         try{
             int choose = Integer.parseInt(CHOOSE);

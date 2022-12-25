@@ -131,6 +131,18 @@ public class AdmissionForm {
 
     @Override
     public String toString() {
+        String state_str="";
+        String reject_reason_str="";
+        switch (state) {
+            case 0 -> state_str = "班级辅导员审核中";
+            case 1 -> state_str = "院系管理员审核中";
+            case 2 -> state_str = "已通过";
+            case -1 -> state_str = "班级辅导员已拒绝";
+            case -2 -> state_str = "院系管理员已拒绝";
+            case -3 -> state_str = "已取消";
+        }
+        if(state==-1||state==-2)
+            reject_reason_str="\t拒绝理由："+reject_reason;
         return "入校申请表单号：" + adform_id +
                 "\t申请日期：" + application_date +
                 "\t学号：" + student_id +
@@ -138,6 +150,8 @@ public class AdmissionForm {
                 "\t院系：" + college_name +
                 "\t班级：" + class_name +
                 "\t入校理由：" + reason +
-                "\t预计返校日期：" + estimated_date;
+                "\t预计返校日期：" + estimated_date +
+                "\t表单状态：" + state_str +
+                reject_reason_str;
     }
 }

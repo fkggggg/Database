@@ -236,6 +236,7 @@ public class Search {
             case 0:
             case 1:
             case 2:
+            case 3:
                 studentList = studentDaoImp.getAllStudent(user.getPermission(), Util.getRangeNameByUser(user));
                 for (int i = 0; i < studentList.size(); i++) {
                     Student s = studentList.get(i);
@@ -245,15 +246,17 @@ public class Search {
                         checkReportList.add(checkReport);
                     }
                 }
-
-                System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
-                for (int i = 0; i < studentList2.size(); i++) {
-                    System.out.println("学生信息");
-                    System.out.println(studentList2.get(i).toString());
-                    System.out.println("离校时间");
-                    System.out.println(checkReportList.get(i).getDate().toString() +
-                            checkReportList.get(i).getTime().toString());
-                }
+                if (user.getPermission() != 3) {
+                    System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+                    for (int i = 0; i < studentList2.size(); i++) {
+                        System.out.println("学生信息");
+                        System.out.println(studentList2.get(i).toString());
+                        System.out.println("离校时间");
+                        System.out.println(checkReportList.get(i).getDate().toString() +
+                                checkReportList.get(i).getTime().toString());
+                    }
+                }else
+                    System.out.println("所在班级内共" + studentList2.size() + "人");
                 break;
             default:;
         }
@@ -283,6 +286,7 @@ public class Search {
             case 0:
             case 1:
             case 2:
+            case 3:
                 studentList = studentDaoImp.getAllStudent(user.getPermission(), Util.getRangeNameByUser(user));
                 Testtime testtime = new Testtime();
                 LocalDateTime dateTime = LocalDateTime.of(testtime.gettestdate().minusDays(1), testtime.gettesttime());
@@ -297,12 +301,14 @@ public class Search {
                         }
                     }
                 }
-
-                System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
-                for (int i = 0; i < studentList2.size(); i++) {
-                    System.out.println("学生信息");
-                    System.out.println(studentList2.get(i).toString());
-                }
+                if (user.getPermission() != 3) {
+                    System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+                    for (int i = 0; i < studentList2.size(); i++) {
+                        System.out.println("学生信息");
+                        System.out.println(studentList2.get(i).toString());
+                    }
+                }else
+                    System.out.println("所在班级内共" + studentList2.size() + "人");
                 break;
             default:;
         }
@@ -339,6 +345,7 @@ public class Search {
             case 0:
             case 1:
             case 2:
+            case 3:
                 studentList = studentDaoImp.getAllStudent(user.getPermission(), Util.getRangeNameByUser(user));
                 Testtime testtime = new Testtime();
                 LocalDateTime dateTime = LocalDateTime.of(testtime.gettestdate(), testtime.gettesttime());
@@ -352,12 +359,14 @@ public class Search {
                         }
                     }
                 }
-
-                System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
-                for (int i = 0; i < studentList2.size(); i++) {
-                    System.out.println("学生信息");
-                    System.out.println(studentList2.get(i).toString());
-                }
+                if (user.getPermission() != 3) {
+                    System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+                    for (int i = 0; i < studentList2.size(); i++) {
+                        System.out.println("学生信息");
+                        System.out.println(studentList2.get(i).toString());
+                    }
+                } else
+                    System.out.println("所在班级内共" + studentList2.size() + "人");
                 break;
             default:;
         }

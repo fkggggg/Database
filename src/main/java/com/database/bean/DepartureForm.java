@@ -156,6 +156,18 @@ public class DepartureForm {
 
     @Override
     public String toString() {
+        String state_str="";
+        String reject_reason_str="";
+        switch (state) {
+            case 0 -> state_str = "班级辅导员审核中";
+            case 1 -> state_str = "院系管理员审核中";
+            case 2 -> state_str = "已通过";
+            case -1 -> state_str = "班级辅导员已拒绝";
+            case -2 -> state_str = "院系管理员已拒绝";
+            case -3 -> state_str = "已取消";
+        }
+        if(state==-1||state==-2)
+            reject_reason_str="\t拒绝理由："+reject_reason;
         return "离校申请表单号：" + deform_id +
                 "\t申请日期：" + application_date +
                 "\t学号：" + student_id +
@@ -165,6 +177,9 @@ public class DepartureForm {
                 "\t离校理由：" + reason +
                 "\t目的地：" + destination +
                 "\t预计离校日期：" + estimated_date +
-                "\t预计返回日期：" + return_date;
+                "\t预计返回日期：" + return_date +
+                "\t表单状态：" + state_str +
+                reject_reason_str
+                ;
     }
 }

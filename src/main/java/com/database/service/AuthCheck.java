@@ -30,7 +30,7 @@ public class AuthCheck {
     public static Auth checkStu(User user, String stu_id) throws SQLException {
         switch (user.getPermission()){
             case 0: return Auth.AUTH_DETAIL;
-            case 1: case 2: break;
+            case 1: case 2: case 3:break;
             default: return Auth.NO_AUTH;
         }
 
@@ -51,13 +51,13 @@ public class AuthCheck {
     }
 
     /*
-    * perm==1 or 2
+    * perm==1 or 2 or 3
     * range=college_name or class_name
     * */
     public static Auth checkRange(User user, int perm, String range) throws SQLException {
         switch (user.getPermission()){
             case 0: return Auth.AUTH_DETAIL;
-            case 1: case 2: break;
+            case 1: case 2: case 3:break;
             default: return Auth.NO_AUTH;
         }
         if (perm == 0){

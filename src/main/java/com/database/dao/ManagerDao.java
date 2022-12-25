@@ -81,7 +81,7 @@ public class ManagerDao {
             return null;
     }
     public Map<String, Object> getClassInstructorByName(String Name) throws SQLException {
-        String sql = "SELECT * FROM database.class_instructor WHERE user_id=?";
+        String sql = "SELECT * FROM database.class_instructor WHERE class_name=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, Name);
         ResultSet result = preparedStatement.executeQuery();
