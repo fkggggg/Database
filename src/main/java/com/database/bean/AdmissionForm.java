@@ -128,4 +128,16 @@ public class AdmissionForm {
     public void setReject_reason(String reject_reason) {
         this.reject_reason = reject_reason;
     }
+
+    @Override
+    public String toString() {
+        return "入校申请表单号：" + adform_id +
+                "\t申请日期：" + application_date +
+                "\t学号：" + student_id +
+                "\t姓名：" + name +
+                "\t院系：" + college_name +
+                "\t班级：" + class_name +
+                "\t入校理由：" + reason +
+                "\t预计返校日期：" + estimated_date;
+    }
 }

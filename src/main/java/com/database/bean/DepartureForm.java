@@ -153,4 +153,18 @@ public class DepartureForm {
     public void setReject_reason(String reject_reason) {
         this.reject_reason = reject_reason;
     }
+
+    @Override
+    public String toString() {
+        return "离校申请表单号：" + deform_id +
+                "\t申请日期：" + application_date +
+                "\t学号：" + student_id +
+                "\t姓名：" + name +
+                "\t院系：" + college_name +
+                "\t班级：" + class_name +
+                "\t离校理由：" + reason +
+                "\t目的地：" + destination +
+                "\t预计离校日期：" + estimated_date +
+                "\t预计返回日期：" + return_date;
+    }
 }

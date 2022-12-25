@@ -110,14 +110,11 @@ public class DailyReport {
 
     @Override
     public String toString() {
-        return "DailyReport{" +
-                "student_id=" + student_id +
-                ", date=" + date +
-                ", time=" + time +
-                ", health_condition=" + health_condition +
-                ", abnormal_description='" + abnormal_description + '\'' +
-                ", temperature='" + temperature + '\'' +
-                ", location='" + location + '\'' +
-                '}';
+        return "学号：" + student_id +
+                "\t日期：" + date +
+                "\t时间：" + time +
+                "\t是否感觉不适：" + (health_condition==1?"否":("是\t异常状况："+abnormal_description)) +
+                "\t体温：" + temperature +
+                "\t地点：" + location;
     }
 }
