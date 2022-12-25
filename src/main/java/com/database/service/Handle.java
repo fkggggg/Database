@@ -36,6 +36,8 @@ public class Handle {
         for (int i = 0; i < rst.size(); i++) {
             System.out.println(rst.get(i).toString());
         }
+        if (rst.size()==0)
+            return;
 
         // update
         System.out.println("输入要处理的编号");
@@ -85,6 +87,8 @@ public class Handle {
         for (int i = 0; i < rst.size(); i++) {
             System.out.println(rst.get(i).toString());
         }
+        if (rst.size()==0)
+            return;
 
         // update
         System.out.println("输入要处理的编号");

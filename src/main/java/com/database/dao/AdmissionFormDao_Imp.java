@@ -135,22 +135,28 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
     @Override
     public List<AdmissionForm> getAllAdmissionFormAfter(User user, LocalDate date) throws SQLException {
         String sql;
+        PreparedStatement preparedStatement;
+        String range;
         switch (user.getPermission()){
             case 0:
                 sql = "SELECT * from admission_form ORDER BY application_date DESC";
+                 preparedStatement = connection.prepareStatement(sql);
                 break;
             case 1:
-                String range = Util.getRangeNameByUser(user);
-                sql = "SELECT * from admission_form WHERE college_name=" + range + " ORDER BY application_date DESC";
+                range = Util.getRangeNameByUser(user);
+                sql = "SELECT * from admission_form WHERE college_name=? ORDER BY application_date DESC";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, range);
                 break;
             case 2:
-                String classRange = Util.getRangeNameByUser(user);
-                sql = "SELECT * from admission_form WHERE class_name=" + classRange+ " ORDER BY application_date DESC";
+                range = Util.getRangeNameByUser(user);
+                sql = "SELECT * from admission_form WHERE class_name=? ORDER BY application_date DESC";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, range);
                 break;
             default:return null;
         }
 
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet result = preparedStatement.executeQuery();
         List<AdmissionForm> admissionFormList = new ArrayList<>();
 
@@ -180,20 +186,25 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
     @Override
     public List<AdmissionForm> getAllAdmissionFormAfter(int perm, String range, LocalDate date) throws SQLException {
         String sql;
+        PreparedStatement preparedStatement;
         switch (perm){
             case 0:
                 sql = "SELECT * from admission_form ORDER BY application_date DESC";
+                preparedStatement = connection.prepareStatement(sql);
                 break;
             case 1:
-                sql = "SELECT * from admission_form WHERE college_name=" + range + " ORDER BY application_date DESC";
+                sql = "SELECT * from admission_form WHERE college_name=? ORDER BY application_date DESC";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, range);
                 break;
             case 2:
-                sql = "SELECT * from admission_form WHERE class_name=" + range+ " ORDER BY application_date DESC";
+                sql = "SELECT * from admission_form WHERE class_name=? ORDER BY application_date DESC";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, range);
                 break;
             default:return null;
         }
 
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet result = preparedStatement.executeQuery();
         List<AdmissionForm> admissionFormList = new ArrayList<>();
 
