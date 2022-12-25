@@ -21,58 +21,70 @@ public class View {
     }
 
     //超级管理员页面
-    public static int SchoolView(){
+    public static int SchoolView() {
         System.out.println("************************************************************************");
         System.out.println("***********************\t\t学校管理\t\t\t\t************************");
         System.out.println("***********************\t\t0：退出\t\t\t\t************************");
         System.out.println("***********************\t\t1：查询学生信息\t\t************************");
         System.out.println("***********************\t\t2：进阶查询\t\t************************");
         String CHOOSE = input.nextLine();
-        int choose = Integer.parseInt(CHOOSE);
-        if(choose > -1 && choose < 3)
-            return choose;
-        else
-        {
+        try {
+            int choose = Integer.parseInt(CHOOSE);
+            if (choose > -1 && choose < 3)
+                return choose;
+            else {
+                System.out.println("请按提示输入指令！");
+                return SchoolView();
+            }
+        } catch (NumberFormatException e) {
             System.out.println("请按提示输入指令！");
             return SchoolView();
         }
     }
 
     //学院页面
-    public static int CollegeView(){
+    public static int CollegeView() {
         System.out.println("************************************************************************");
         System.out.println("***********************\t\t学院管理\t\t\t\t************************");
         System.out.println("***********************\t\t0：退出\t\t\t\t************************");
         System.out.println("***********************\t\t1：查询学生信息\t\t************************");
         System.out.println("***********************\t\t2：查询入校申请\t\t************************");
         System.out.println("***********************\t\t3：查询出校申请\t\t************************");
-        System.out.println("***********************\t\t4：进阶查询\t\t************************");
+        System.out.println("***********************\t\t4：进阶查询\t\t\t************************");
         String CHOOSE = input.nextLine();
-        int choose = Integer.parseInt(CHOOSE);
-        if(choose > -1 && choose < 5)
-            return choose;
-        else
-        {
+        try {
+            int choose = Integer.parseInt(CHOOSE);
+            if (choose > -1 && choose < 5)
+                return choose;
+            else {
+                System.out.println("请按提示输入指令！");
+                return CollegeView();
+            }
+        } catch (NumberFormatException e) {
             System.out.println("请按提示输入指令！");
             return CollegeView();
         }
     }
 
     //班级页面
-    public static int ClassView(){
+    public static int ClassView() {
         System.out.println("************************************************************************");
         System.out.println("***********************\t\t班级管理\t\t\t\t************************");
         System.out.println("***********************\t\t0：退出\t\t\t\t************************");
         System.out.println("***********************\t\t1：查询学生信息\t\t************************");
         System.out.println("***********************\t\t2：查询入校申请\t\t************************");
         System.out.println("***********************\t\t3：查询出校申请\t\t************************");
-        System.out.println("***********************\t\t4：进阶查询\t\t************************");
+        System.out.println("***********************\t\t4：进阶查询\t\t\t************************");
         String CHOOSE = input.nextLine();
-        int choose = Integer.parseInt(CHOOSE);
-        if(choose > -1 && choose < 6)
-            return choose;
-        else
-        {
+        try {
+            int choose = Integer.parseInt(CHOOSE);
+            if (choose > -1 && choose < 6)
+                return choose;
+            else {
+                System.out.println("请按提示输入指令！");
+                return ClassView();
+            }
+        } catch (NumberFormatException e) {
             System.out.println("请按提示输入指令！");
             return ClassView();
         }

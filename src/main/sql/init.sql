@@ -13,6 +13,10 @@ INSERT into `user` VALUES ('2','test1','123','1');
 INSERT into `user` VALUES ('3','test2','123','2');
 INSERT into `user` VALUES ('4','张三','123','3');
 INSERT into `user` VALUES ('5','李四','123','3');
+INSERT into `user` VALUES ('6','软件班级辅导员','123','2');
+INSERT into `user` VALUES ('7','软件院系管理员','123','1');
+INSERT into `user` VALUES ('8','计算机班级辅导员','123','2');
+INSERT into `user` VALUES ('9','计算机院系管理员','123','1');
 
 DROP TABLE IF EXISTS `super_user`;
 CREATE TABLE `super_user` (
@@ -33,6 +37,8 @@ CREATE TABLE `college_administrator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='院系管理员';
 
 INSERT into `college_administrator` VALUES ('2','00001','院系管理员测试','学院测试');
+INSERT into `college_administrator` VALUES ('7','00011','软件院系','软件学院');
+INSERT into `college_administrator` VALUES ('9','00111','计算机院系','计算机科学技术学院');
 
 DROP TABLE IF EXISTS `class_instructor`;
 CREATE TABLE `class_instructor` (
@@ -45,6 +51,8 @@ CREATE TABLE `class_instructor` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='班级辅导员';
 
 INSERT into `class_instructor` VALUES ('3','00002','班级辅导员测试','学院测试','班级测试');
+INSERT into `class_instructor` VALUES ('6','00022','软件班级','软件学院','1班');
+INSERT into `class_instructor` VALUES ('8','00222','计算机班级','学院测试','1班');
 
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
