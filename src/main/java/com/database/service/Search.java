@@ -484,12 +484,14 @@ public class Search {
                 studentList2.add(s);
             }
         }
-
-        System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
-        for (int i = 0; i < studentList2.size(); i++) {
-            System.out.println("学生信息");
-            System.out.println(studentList2.get(i).toString());
-        }
+        if (user.getPermission() != 3) {
+            System.out.println("所管理范围内共查询到" + studentList2.size() + "条记录");
+            for (int i = 0; i < studentList2.size(); i++) {
+                System.out.println("学生信息");
+                System.out.println(studentList2.get(i).toString());
+            }
+        } else
+            System.out.println("所在班级内共" + studentList2.size() + "人");
 
         if (user.getPermission() == 2){
             int m=0;
