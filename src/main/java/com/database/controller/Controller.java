@@ -57,21 +57,24 @@ public class Controller {
         1：查询学生信息
         2：进阶查询
         */
-        int opt = SchoolView();
-        switch (opt){
-            case 0: return;
+        while(true){
 
-            case 1:
-                StuSearch(user);
-                break;
+            int opt = SchoolView();
+            switch (opt){
+                case 0: return;
 
-            case 2:
-                int dev_opt = DevelopSearchView();
-                DevelopSearch(user, dev_opt);
-                break;
+                case 1:
+                    StuSearch(user);
+                    break;
 
-            default:
-                System.out.println("error!");
+                case 2:
+                    int dev_opt = DevelopSearchView();
+                    DevelopSearch(user, dev_opt);
+                    break;
+
+                default:
+                    System.out.println("error!");
+            }
         }
     }
     private static void CollegeServer(User user) throws Exception {
@@ -82,30 +85,32 @@ public class Controller {
         3：查询出校申请
         4：进阶查询
         */
+        while (true){
 
-        int opt = CollegeView();
-        switch (opt){
-            case 0: return;
+            int opt = CollegeView();
+            switch (opt){
+                case 0: return;
 
-            case 1:
-                StuSearch(user);
-                break;
+                case 1:
+                    StuSearch(user);
+                    break;
 
-            case 2:
-                handleAdmission(user);
-                break;
+                case 2:
+                    handleAdmission(user);
+                    break;
 
-            case 3:
-                handleDeparture(user);
-                break;
+                case 3:
+                    handleDeparture(user);
+                    break;
 
-            case 4:
-                int dev_opt = DevelopSearchView();
-                DevelopSearch(user, dev_opt);
-                break;
+                case 4:
+                    int dev_opt = DevelopSearchView();
+                    DevelopSearch(user, dev_opt);
+                    break;
 
-            default:
-                System.out.println("error!");
+                default:
+                    System.out.println("error!");
+            }
         }
     }
     private static void ClassServer(User user) throws Exception {
@@ -116,29 +121,33 @@ public class Controller {
         3：查询出校申请
         4：进阶查询
         */
-        int opt = ClassView();
-        switch (opt){
-            case 0: return;
 
-            case 1:
-                StuSearch(user);
-                break;
+        while(true){
 
-            case 2:
-                handleAdmission(user);
-                break;
+            int opt = ClassView();
+            switch (opt){
+                case 0: return;
 
-            case 3:
-                handleDeparture(user);
-                break;
+                case 1:
+                    StuSearch(user);
+                    break;
 
-            case 4:
-                int dev_opt = DevelopSearchView();
-                DevelopSearch(user, dev_opt);
-                break;
+                case 2:
+                    handleAdmission(user);
+                    break;
 
-            default:
-                System.out.println("error!");
+                case 3:
+                    handleDeparture(user);
+                    break;
+
+                case 4:
+                    int dev_opt = DevelopSearchView();
+                    DevelopSearch(user, dev_opt);
+                    break;
+
+                default:
+                    System.out.println("error!");
+            }
         }
     }
     private static void StudentServer(User user) throws SQLException, ParseException {
