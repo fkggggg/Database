@@ -157,6 +157,7 @@ public class Controller {
         CheckReportDao_Imp checkReportDao_imp = new CheckReportDao_Imp();
         DepartureFormDao_Imp departureFormDao_imp = new DepartureFormDao_Imp();
         AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
+        int exitstudent=1;
 
         //获取学生信息
         Student student = studentDao_imp.getStudent(user);
@@ -204,11 +205,11 @@ public class Controller {
             departureForm.setClass_name(student.getClass_name());
         }
 
-        while(true)
+        while(exitstudent==1)
         {
             int choose = View.StudentView();
             switch (choose) {
-                case 0 -> System.exit(-1);
+                case 0 -> exitstudent = 0;
                 case 1 -> {
                     boolean exit = false;
                     while (!exit) {
