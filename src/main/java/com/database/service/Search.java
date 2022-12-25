@@ -241,6 +241,7 @@ public class Search {
                 for (int i = 0; i < studentList.size(); i++) {
                     Student s = studentList.get(i);
                     CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                    if(checkReport.getDate() == null) continue;
                     if(checkReport.getState() == 0){
                         studentList2.add(s);
                         checkReportList.add(checkReport);
@@ -267,6 +268,7 @@ public class Search {
             int n = 0;
             for (Student s : studentList) {
                 CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                if(checkReport.getDate() == null) continue;
                 if (checkReport.getState() == 0) {
                     n++;
                 }
@@ -293,6 +295,7 @@ public class Search {
                 for (int i = 0; i < studentList.size(); i++) {
                     Student s = studentList.get(i);
                     CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                    if(checkReport.getDate() == null) continue;
                     LocalDateTime last_out = LocalDateTime.of(checkReport.getDate(), checkReport.getTime());
                     if(checkReport.getState() == 0 && last_out.isBefore(dateTime)){
                         DepartureForm departureForm = departureFormDao_imp.getmyDepartureForm(s.getStudent_id());
@@ -321,6 +324,7 @@ public class Search {
             for (int i = 0; i < studentList.size(); i++) {
                 Student s = studentList.get(i);
                 CheckReport checkReport = checkReportDao_imp.getlatestCheckReport(s.getStudent_id());
+                if(checkReport.getDate() == null) continue;
                 LocalDateTime last_out = LocalDateTime.of(checkReport.getDate(), checkReport.getTime());
                 if(checkReport.getState() == 0 && last_out.isBefore(dateTime)){
                     DepartureForm departureForm = departureFormDao_imp.getmyDepartureForm(s.getStudent_id());
