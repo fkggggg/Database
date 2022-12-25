@@ -154,7 +154,7 @@ public class DepartureFormDao_Imp implements DepartureFormDao {
     }
 
     public boolean updateDepartureFormState(int deform_id, int newState, String reason) throws SQLException {
-        String sql = "UPDATE database.departure_form SET `state`=?, reason=? WHERE deform_id=?";
+        String sql = "UPDATE database.departure_form SET `state`=?, reject_reason=? WHERE deform_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, newState);
         preparedStatement.setString(2,reason);
