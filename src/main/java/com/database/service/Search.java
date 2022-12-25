@@ -2,9 +2,7 @@ package com.database.service;
 
 import com.database.bean.*;
 import com.database.dao.*;
-import com.database.dao.StudentDao.*;
 import com.database.testtime.Testtime;
-import jdk.incubator.vector.VectorOperators;
 
 import java.sql.SQLException;
 import java.text.ParseException;
