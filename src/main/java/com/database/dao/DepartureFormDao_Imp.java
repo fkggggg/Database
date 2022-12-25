@@ -108,16 +108,16 @@ public class DepartureFormDao_Imp implements DepartureFormDao {
         PreparedStatement preparedStatement;
         switch (perm){
             case 0:
-                sql = "SELECT * from database.departure_report_form ORDER BY application_date DESC";
+                sql = "SELECT * from database.departure_form ORDER BY application_date DESC";
                 preparedStatement = connection.prepareStatement(sql);
                 break;
             case 1:
-                sql = "SELECT * from database.departure_report_form WHERE college_name=? ORDER BY application_date DESC";
+                sql = "SELECT * from database.departure_form WHERE college_name=? ORDER BY application_date DESC";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, range);
                 break;
             case 2:
-                sql = "SELECT * from database.departure_report_form WHERE class_name=? ORDER BY application_date DESC";
+                sql = "SELECT * from database.departure_form WHERE class_name=? ORDER BY application_date DESC";
                 preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, range);
                 break;
@@ -154,7 +154,7 @@ public class DepartureFormDao_Imp implements DepartureFormDao {
     }
 
     public boolean updateDepartureFormState(int deform_id, int newState, String reason) throws SQLException {
-        String sql = "UPDATE database.departure_report_form SET `state`=?, reason=? WHERE deform_id=?";
+        String sql = "UPDATE database.departure_form SET `state`=?, reason=? WHERE deform_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, newState);
         preparedStatement.setString(2,reason);

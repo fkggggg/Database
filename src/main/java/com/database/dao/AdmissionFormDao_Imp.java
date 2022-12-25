@@ -50,7 +50,7 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
     }
 
     public boolean updateAdmissionFormState(int adform_id, int newState, String reason) throws SQLException {
-        String sql = "UPDATE database.admission_report_form SET `state`=?, reason=? WHERE adform_id=?";
+        String sql = "UPDATE database.admission_form SET `state`=?, reason=? WHERE adform_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, newState);
         preparedStatement.setString(2,reason);
@@ -60,7 +60,7 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
     }
 
     public AdmissionForm getAdmissionFormById(int adform_id) throws SQLException{
-        String sql = "SELECT * from admission_form where adform_id=?";
+        String sql = "SELECT * from database.admission_form where adform_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1,adform_id);
         ResultSet result = preparedStatement.executeQuery();
@@ -109,7 +109,7 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
 
     @Override
     public List<AdmissionForm> getAllAdmissionForm(String student_id) throws SQLException {
-        String sql = "SELECT * from admission_form WHERE student_id=?";
+        String sql = "SELECT * from database.admission_form WHERE student_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1,student_id);
         ResultSet result = preparedStatement.executeQuery();
