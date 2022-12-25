@@ -42,11 +42,10 @@ public class Search {
             case 1:
                 System.out.println("进校申请");
                 list = admissionFormDao_imp.getAllAdmissionFormAfter(user, localDate);
-                rst = list.stream().map(a->{
-                    if (a.getState() == 0 || a.getState() == 1)
-                        return a;
-                    else return null;
-                }).collect(Collectors.toList());
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getState() == 0 || list.get(i).getState() == 1)
+                        rst.add(list.get(i));
+                }
                 System.out.println("所管理范围内共查询到" + rst.size() + "条记录");
                 for (int i = 0; i < rst.size(); i++) {
                     System.out.println(rst.get(i).toString());
@@ -54,11 +53,11 @@ public class Search {
 
                 System.out.println("离校申请");
                 list2 = departureFormDao_imp.getAllDepartureFormAfter(user.getPermission(), Util.getRangeNameByUser(user), localDate);
-                rst2 = list2.stream().map(a->{
+                for (int i = 0; i < list2.size(); i++) {
+                    DepartureForm a = list2.get(i);
                     if (a.getState() == 0 || a.getState() == 1)
-                        return a;
-                    else return null;
-                }).collect(Collectors.toList());
+                        rst2.add(a);
+                }
                 System.out.println("所管理范围内共查询到" + rst2.size() + "条记录");
                 for (int i = 0; i < rst2.size(); i++) {
                     System.out.println(rst2.get(i).toString());
@@ -66,11 +65,11 @@ public class Search {
                 break;
             case 2:
                 list = admissionFormDao_imp.getAllAdmissionFormAfter(user, localDate);
-                rst = list.stream().map(a->{
+                for (int i = 0; i < list.size(); i++) {
+                    AdmissionForm a = list.get(i);
                     if (a.getState() == 0)
-                        return a;
-                    else return null;
-                }).collect(Collectors.toList());
+                        rst.add(a);
+                }
                 System.out.println("进校申请");
                 System.out.println("所管理范围内共查询到" + rst.size() + "条记录");
                 for (int i = 0; i < rst.size(); i++) {
@@ -82,11 +81,11 @@ public class Search {
 
                 System.out.println("离校申请");
                 list2 = departureFormDao_imp.getAllDepartureFormAfter(user.getPermission(), Util.getRangeNameByUser(user), localDate);
-                rst2 = list2.stream().map(a->{
+                for (int i = 0; i < list2.size(); i++) {
+                    DepartureForm a = list2.get(i);
                     if (a.getState() == 0 || a.getState() == 1)
-                        return a;
-                    else return null;
-                }).collect(Collectors.toList());
+                        rst2.add(a);
+                }
                 System.out.println("所管理范围内共查询到" + rst2.size() + "条记录");
                 for (int i = 0; i < rst2.size(); i++) {
                     System.out.println(rst2.get(i).toString());
@@ -670,17 +669,18 @@ public class Search {
                         else{ // 2
                             integersAllowed.add(0);
                         }
-                        List<AdmissionForm>  alst = admissionForms.stream().map(a->{
+                        List<AdmissionForm>  alst = new ArrayList<>();
+                        for (int i = 0; i < admissionForms.size(); i++) {
+                            AdmissionForm a = admissionForms.get(i);
                             if (integersAllowed.contains(a.getState()))
-                                return a;
-                            else
-                                return null;
-                        }).collect(Collectors.toList());
-                        List<DepartureForm> dlst = departureForms.stream().map(d->{
-                            if (integersAllowed.contains(d.getState()))
-                                return d;
-                            else return null;
-                        }).collect(Collectors.toList());
+                                alst.add(a);
+                        }
+                        List<DepartureForm> dlst = new ArrayList<>();
+                        for (int i = 0; i < departureForms.size(); i++) {
+                            DepartureForm a = departureForms.get(i);
+                            if (integersAllowed.contains(a.getState()))
+                                dlst.add(a);
+                        }
                         System.out.println("*********入校申请*********");
                         for (int i = 0; i < alst.size(); i++) {
                             System.out.println(alst.get(i).toString());
@@ -698,17 +698,19 @@ public class Search {
                             integersAllowed.add(2);
                             integersAllowed.add(1);
                         }
-                        List<AdmissionForm>  alst = admissionForms.stream().map(a->{
+
+                        List<AdmissionForm>  alst = new ArrayList<>();
+                        for (int i = 0; i < admissionForms.size(); i++) {
+                            AdmissionForm a = admissionForms.get(i);
                             if (integersAllowed.contains(a.getState()))
-                                return a;
-                            else
-                                return null;
-                        }).collect(Collectors.toList());
-                        List<DepartureForm> dlst = departureForms.stream().map(d->{
-                            if (integersAllowed.contains(d.getState()))
-                                return d;
-                            else return null;
-                        }).collect(Collectors.toList());
+                                alst.add(a);
+                        }
+                        List<DepartureForm> dlst = new ArrayList<>();
+                        for (int i = 0; i < departureForms.size(); i++) {
+                            DepartureForm a = departureForms.get(i);
+                            if (integersAllowed.contains(a.getState()))
+                                dlst.add(a);
+                        }
                         System.out.println("*********入校申请*********");
                         for (int i = 0; i < alst.size(); i++) {
                             System.out.println(alst.get(i).toString());
@@ -720,17 +722,18 @@ public class Search {
                     }
                     if (str.contains("3")){// 已拒绝
 
-                        List<AdmissionForm>  alst = admissionForms.stream().map(a->{
+                        List<AdmissionForm>  alst = new ArrayList<>();
+                        for (int i = 0; i < admissionForms.size(); i++) {
+                            AdmissionForm a = admissionForms.get(i);
                             if (a.getState() == -1 || a.getState() == -2)
-                                return a;
-                            else
-                                return null;
-                        }).collect(Collectors.toList());
-                        List<DepartureForm> dlst = departureForms.stream().map(d->{
-                            if (d.getState() == -1 || d.getState() == -2)
-                                return d;
-                            else return null;
-                        }).collect(Collectors.toList());
+                                alst.add(a);
+                        }
+                        List<DepartureForm> dlst = new ArrayList<>();
+                        for (int i = 0; i < departureForms.size(); i++) {
+                            DepartureForm a = departureForms.get(i);
+                            if (a.getState() == -1 || a.getState() == -2)
+                                dlst.add(a);
+                        }
                         System.out.println("*********入校申请*********");
                         for (int i = 0; i < alst.size(); i++) {
                             System.out.println(alst.get(i).toString());
