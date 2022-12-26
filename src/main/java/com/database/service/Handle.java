@@ -7,6 +7,7 @@ import com.database.dao.AdmissionFormDao_Imp;
 import com.database.dao.DepartureFormDao_Imp;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class Handle {
     private static Scanner input = new Scanner(System.in);
-    public static void handleAdmission(User user) throws SQLException {
+    public static void handleAdmission(User user) throws SQLException, ParseException {
 
         AdmissionFormDao_Imp admissionFormDao_imp = new AdmissionFormDao_Imp();
 

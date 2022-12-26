@@ -4,11 +4,13 @@ import com.database.bean.AdmissionForm;
 import com.database.bean.User;
 import com.database.jdbc.JDBCUtils;
 import com.database.service.Util;
+import com.database.testtime.Testtime;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -49,13 +51,33 @@ public class AdmissionFormDao_Imp implements AdmissionFormDao{
         return result > 0;
     }
 
-    public boolean updateAdmissionFormState(int adform_id, int newState, String reason) throws SQLException {
+    public boolean updateAdmissionFormState(int adform_id, int newState, String reason) throws SQLException, ParseException {
         String sql = "UPDATE database.admission_form SET `state`=?, reject_reason=? WHERE adform_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, newState);
         preparedStatement.setString(2,reason);
         preparedStatement.setInt(3,adform_id);
         int result = preparedStatement.executeUpdate();
+
+        if(newState==2){
+            String getsql = "SELECT * from admission_form WHERE adform_id=?";
+            preparedStatement = connection.prepareStatement(getsql);
+            preparedStatement.setInt(1,adform_id);
+            ResultSet r=preparedStatement.executeQuery();
+            if(r.next()){
+                DateTimeFormatter df1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                Testtime testtime=new Testtime();
+                LocalDate date=LocalDate.parse(r.getString("estimated_date"),df1);
+                if(date==testtime.gettestdate())
+                {
+                    String stu_id=r.getString("student_id");
+                    String updatestudentlimit="UPDATE student SET limit_H=0,limit_J=0,limit_F=0,limit_Z=0 WHERE student_id=?";
+                    preparedStatement = connection.prepareStatement(updatestudentlimit);
+                    preparedStatement.setString(1,stu_id);
+                    result=preparedStatement.executeUpdate();
+                }
+            }
+        }
         return result > 0;
     }
 

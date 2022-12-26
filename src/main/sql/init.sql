@@ -221,18 +221,3 @@ BEGIN
                                 AND estimated_date <= today) as `aft*`);
 end;
 
-CREATE TRIGGER adform_change AFTER UPDATE ON admission_form
-    FOR EACH ROW
-BEGIN
-    UPDATE student
-    SET limits_H=0,
-        limits_J=0,
-        limits_F=0,
-        limits_Z=0
-    WHERE student_id IN (SELECT student_id
-                                 from (SELECT *
-                                       from admission_form,
-                                            testdate
-                                       WHERE state = 2
-                                         AND estimated_date = today) as `aft*`);
-end;
