@@ -19,7 +19,8 @@ import static com.database.view.View.*;
 
 public class Controller {
     public static void main(String arg[]) throws Exception {
-
+        Testtime testtime=new Testtime();
+        testtime.changedate();
         while(true)
         {
             User loginuser = View.LoginView();
@@ -71,7 +72,6 @@ public class Controller {
                     int dev_opt = DevelopSearchView();
                     DevelopSearch(user, dev_opt);
                     break;
-
                 default:
                     System.out.println("error!");
             }

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AdmissionFormDao_Imp implements AdmissionFormDao{
     private static final String ADD_ADMISSION_FORM = "INSERT INTO `admission_form` VALUES (null,?, ?, ?, ?, ?, ?, ?, 0,null)";
-    private static final String SELECT_MY_ADMISSION_FORM = "SELECT * from admission_form WHERE student_id=? AND state<>-3 AND estimated_date>=CURRENT_DATE";
+    private static final String SELECT_MY_ADMISSION_FORM = "SELECT * from admission_form WHERE student_id=? AND state<>-3";
     private static final String DELETE_ADMISSION_FORM = "DELETE from `admission_form` WHERE adform_id=?";
 
     Connection connection = JDBCUtils.getConnection();

@@ -268,7 +268,8 @@ public class StudentView {
                     {
                         System.out.println("***********************\t\t请输入预计入校日期(格式:年-月-日，示例：2022-12-25)：");
                         estimated_date = LocalDate.parse(input.nextLine(),df1);
-                        if(estimated_date.isBefore(LocalDate.now()))
+                        Testtime testtime=new Testtime();
+                        if(estimated_date.isBefore(testtime.gettestdate()))
                             System.out.println("入校日期不能早于今天日期！");
                         else
                             check = 1;
@@ -371,7 +372,8 @@ public class StudentView {
                     {
                         System.out.println("***********************\t\t请输入预计离校日期(格式:年-月-日，示例：2022-12-25)：");
                         estimated_date = LocalDate.parse(input.nextLine(),df1);
-                        if(estimated_date.isBefore(LocalDate.now()))
+                        Testtime testtime=new Testtime();
+                        if(estimated_date.isBefore(testtime.gettestdate()))
                             System.out.println("离校日期不能早于今天日期！");
                         else
                             check = 1;

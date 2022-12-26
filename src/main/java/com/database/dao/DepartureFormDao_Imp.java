@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DepartureFormDao_Imp implements DepartureFormDao {
     private static final String ADD_DEPARTURE_FORM = "INSERT INTO `departure_form` VALUES (null,?, ?, ?, ?, ?, ?, ?, ?, ?,0,null)";
-    private static final String SELECT_MY_DEPARTURE_FORM = "SELECT * from departure_form WHERE student_id=? AND state<>-3 AND estimated_date>=CURRENT_DATE";
+    private static final String SELECT_MY_DEPARTURE_FORM = "SELECT * from departure_form WHERE student_id=? AND state<>-3";
     private static final String DELETE_DEPARTURE_FORM = "DELETE from `departure_form` WHERE deform_id=?";
 
     Connection connection = JDBCUtils.getConnection();

@@ -131,7 +131,7 @@ CREATE TABLE `departure_form` (
                                 `reject_reason` varchar(200) DEFAULT NULL,
                                 PRIMARY KEY (`deform_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='出校申请表';
-/* state:状态，0学生填表提交，班级辅导员审核中。1：班级辅导员同意，院系负责人审核中。2：院系负责人同意。-1：班级辅导员拒绝。-2：院系管理员拒绝。-3：学生取消申请*/
+/* state:状态，0学生填表提交，班级辅导员审核中。1：班级辅导员同意，院系负责人审核中。2：院系负责人同意。3：权限变更已执行。-1：班级辅导员拒绝。-2：院系管理员拒绝。-3：学生取消申请。-4：审核未通过，已过期*/
 
 
 DROP TABLE IF EXISTS `admission_form`;
@@ -148,3 +148,91 @@ CREATE TABLE `admission_form` (
                                          `reject_reason` varchar(200) DEFAULT NULL,
                                          PRIMARY KEY (`adform_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='入校申请表';
+
+INSERT INTO `admission_form` VALUES('1','2022-12-22','20301234567','张三','软件学院','1班','1','2022-12-22','2',null);
+
+DROP TABLE IF EXISTS `testdate`;
+CREATE TABLE `testdate` (
+    `today` date
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='日期';
+
+INSERT INTO `testdate` SET today='2022-12-20';
+
+
+
+
+CREATE TRIGGER date_change AFTER UPDATE ON testdate
+FOR EACH ROW
+BEGIN
+
+    UPDATE student
+    SET limits_H=1,
+        limits_J=1,
+        limits_F=1,
+        limits_Z=1
+    WHERE student_id NOT IN (SELECT student_id
+                             from (SELECT daily_health_report.student_id
+                                   from daily_health_report,
+                                        testdate
+                                   WHERE date = today - 1) as dhrtsi);
+
+    UPDATE departure_form
+    SET state=-4
+    WHERE departure_form.deform_id IN (SELECT deform_id
+                                       from (SELECT *
+                                             from departure_form,
+                                                  testdate
+                                             WHERE (state = 0 OR state = 1)
+                                               AND estimated_date <= today - 1) as `dft*`);
+
+    UPDATE admission_form
+    SET state=-4
+    WHERE admission_form.adform_id IN (SELECT adform_id
+                                       from (SELECT adform_id
+                                             from admission_form,
+                                                  testdate
+                                             WHERE (state = 0 OR state = 1)
+                                               AND estimated_date <= today - 1) as aftai);
+
+    UPDATE student,departure_form
+    SET limits_H=1,
+        limits_J=1,
+        limits_F=1,
+        limits_Z=1,
+        state=3
+    WHERE deform_id IN (SELECT deform_id
+                        from (SELECT *
+                              from departure_form,
+                                   testdate
+                              WHERE state = 2
+                                AND estimated_date <= today - 1) as `dft*2`);
+
+    UPDATE student,admission_form
+    SET limits_H=0,
+        limits_J=0,
+        limits_F=0,
+        limits_Z=0,
+        state=3
+    WHERE adform_id IN (SELECT adform_id
+                        from (SELECT *
+                              from admission_form,
+                                   testdate
+                              WHERE state = 2
+                                AND estimated_date <= today) as `aft*`);
+end;
+
+CREATE TRIGGER adform_change AFTER UPDATE ON admission_form
+    FOR EACH ROW
+BEGIN
+    UPDATE student
+    SET limits_H=0,
+        limits_J=0,
+        limits_F=0,
+        limits_Z=0
+    WHERE student_id IN (SELECT student_id
+                                 from (SELECT *
+                                       from admission_form,
+                                            testdate
+                                       WHERE state = 2
+                                         AND estimated_date = today) as `aft*`);
+end;
